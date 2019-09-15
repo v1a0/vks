@@ -1,4 +1,5 @@
-# VkScrapper
+# VkScrapper ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
+ 
  Program for monitor your own online activity on vk.com
 
 ## Libraries Installation
