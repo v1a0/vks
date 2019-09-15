@@ -26,9 +26,9 @@ Enter user id (Введите id  пользователя): 10000451
 If monitoring start successful you'll see message like that:
 ```bash
 START: 05-01-1984 00:00 | Guy Montag | URL: https://vk.com/id10000451
-15-09-2019 00:00 | заходил 41 минуту назад
-15-09-2019 00:01 | заходил 42 минуты назад
-15-09-2019 00:02 | Online
+05-01-2019 00:00 | заходил 41 минуту назад
+05-01-2019 00:01 | заходил 42 минуты назад
+05-01-2019 00:02 | Online
 ```
 Don't close the terminal until you didn't finished monitoring.
 
