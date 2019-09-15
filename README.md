@@ -6,7 +6,9 @@
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install libraries.
 
 ```python
-pip install requests | pip install bs4 | pip install BeautifulSoup
+pip install requests
+pip install bs4
+pip install BeautifulSoup
 ```
 
 ## Usage
