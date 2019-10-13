@@ -10,6 +10,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install librari
 pip install requests
 pip install bs4
 pip install BeautifulSoup
+pip install lxml
 ```
 
 ## Usage
