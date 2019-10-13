@@ -1,6 +1,6 @@
 # VkScrapper ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
  
- Program for monitor your own online activity on vk.com
+ Program for monitor your own online activity on [vk.com](https://vk.com/)
 
 ## Libraries Installation
 
@@ -30,9 +30,9 @@ Enter user id (Введите id  пользователя): 10000451
 If monitoring start successful you'll see message like that:
 ```bash
 START: 05-01-1984 00:00 | Guy Montag | URL: https://vk.com/id10000451
-05-01-2019 00:00 | заходил 41 минуту назад
-05-01-2019 00:01 | заходил 42 минуты назад
-05-01-2019 00:02 | Online
+05-01-1984 00:00 | заходил 41 минуту назад
+05-01-1984 00:01 | заходил 42 минуты назад
+05-01-1984 00:02 | Online
 ```
 Don't close the terminal until you didn't finished monitoring.
 
