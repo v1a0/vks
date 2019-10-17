@@ -37,7 +37,7 @@ START: 05-01-1984 00:00 | Guy Montag | URL: https://vk.com/id10000451
 Don't close the terminal until you didn't finished monitoring.
 
 ### After
-After you collect some statistic, you can found 2 type of files `05-01-1984_full_log.txt` and `05-01-1984_log.txt`.
+After you collect some statistic, you can found 2 type of files in './log' directorie: `05-01-1984_full_log.txt` and `05-01-1984_log.txt`.
 `05-01-1984_full_log` - it's log with every minute statistic
 
 `05-01-1984_log` - it's only about online time
