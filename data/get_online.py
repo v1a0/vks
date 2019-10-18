@@ -3,6 +3,7 @@ import datetime
 import os
 import time
 
+# custom modules
 import html_parser
 import html_requests
 import log_editor as log
@@ -24,15 +25,17 @@ os.system('cls' if os.name == 'nt' else 'clear')  # Clear the console
 
 
 # - - - - - C O U N T E R S - - - - - - #
-a, b, on_c, off_c = 1, 0, 0, 0
+a, on_c = 1, 0
 # - - - - - - - - - - - - - - - - - - - #
 
 
 # - - - - - - - S T A R T - - - - - - - #
 print('Enter user id (Введите id  пользователя):', end=" ")
 url = 'https://vk.com/id' + input()
+
 html_requests.get_html(url)
 start = '\nSTART: ' + time_dt + ' | ' + html_parser.get_name() + ' | URL: ' + url
+
 log.add2log(start, time_d + '_log.txt')         # add start data to log
 log.add2log(start, time_d + '_full_log.txt')    # add start data to full_log
 
@@ -75,4 +78,4 @@ while True:
 
     print(result)
     log.add2log(result, (time_d + '_full_log.txt'))
-    time.sleep(60)
+    time.sleep(60) # time pause (sec)
