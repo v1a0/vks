@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 
 # Get last seen information
-def lastseen(id):
-    html_ = open('./html/' + id + '.html', 'r', encoding="utf8")  # opening HTML file +encoding
+def lastseen():
+    html_ = open('./html/' + 'test.html', 'r', encoding="utf8")  # opening HTML file +encoding
     soup = BeautifulSoup(html_, 'lxml')  # creating soup-object
     # Searching right place
     try:
@@ -18,12 +18,12 @@ def lastseen(id):
     return info
 
 # Update name from html file
-def get_name(id):
-    html_ = open('./html/' + id + '.html', 'r', encoding="utf8")  # opening HTML file + encoding
+def get_name():
+    html_ = open('./html/' + 'test.html', 'r', encoding="utf8")  # opening HTML file + encoding
     soup = BeautifulSoup(html_, 'lxml')  # creating soup-object
     # Searching right place
     try:
-        info = soup.find('title').next_element  # searching info about
+        info = soup.find('h2', class_='op_header').next_element  # searching info about
     except:
         info = 'error'
     return info
