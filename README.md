@@ -20,7 +20,7 @@ pip install requests
 Found id of your VK page.
 
 ### How to run
-## First way
+#### First way
 For run use python:
 ```bash
 py get_online.py
@@ -36,7 +36,7 @@ START: 05-01-1984 00:00 | Guy Montag | URL: https://vk.com/id10000451
 05-01-1984 00:01 | заходил 42 минуты назад
 05-01-1984 00:02 | Online
 ```
-## Second way
+#### Second way
 For run use python and some arguments:
 ```bash
 py get_online.py -i 10000451 -l +71234567890 -p pwned1234 -t 60
