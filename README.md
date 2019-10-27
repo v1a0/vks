@@ -45,8 +45,8 @@ Arguments list:
 - `-i` / `--id` - id,
 - `-l` / `--login` - phone or email,
 - `-p` / `--password` - password,
-- `-t` / `--timesleep` - request frequency (sec)
- - Don't recommended to use
+- `-t` / `--timesleep` - request frequency (sec) [debug tool]
+
 
 If monitoring start successful you'll see message like that:
 ```bash
