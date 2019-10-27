@@ -42,10 +42,10 @@ For run use python and some arguments:
 py get_online.py -i 10000451 -l +71234567890 -p pwned1234 -t 60
 ```
 Arguments list:
-`-i` / `--id` - id,
-`-l` / `--login` - phone or email,
-`-p` / `--password` - password,
-`-t` / `--timesleep` - request frequency (sec)
+[x] `-i` / `--id` - id,
+[x] `-l` / `--login` - phone or email,
+[x] `-p` / `--password` - password,
+[x] `-t` / `--timesleep` - request frequency (sec)
 
 If monitoring start successful you'll see message like that:
 ```bash
