@@ -98,6 +98,7 @@ After you collect some statistic data, you can stop script. Just close console o
 Now you need to analyze and/or visualize this information. After next updated it'll have inline tool for this <b>[COMING SOON]</b>.<br/>
 Multiple targets support is <b>[COMING SOON]</b>.
 ###### ~~Converting to HTML~~ - Not supported at last versions
+
 ---
 
 # Contributing
