@@ -127,8 +127,10 @@ After that you can find some .html files into main script's directory. Format of
 Open it by any browser and enjoy.
 
 <details> <summary> Example of html file (screenshot):</summary>
- 
- ![screenshot](https://github.com/V1A0/VkScrapper/tree/master/.old/pics/example.png)
+
+ <img src="https://raw.githubusercontent.com/V1A0/VkScrapper/master/.old/pics/example.png"
+     alt="example-screenshot"
+     style="float: left;" />
  
 </details>
 
