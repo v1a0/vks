@@ -37,26 +37,13 @@ import requests
 from bs4 import BeautifulSoup
 
 # CREATING DIRECTORIES
-try:
-    os.mkdir('./log/')
-except:
-    pass
-try:
-    os.mkdir('data')
-except:
-    pass
-try:
-    os.mkdir('./data/html/')
-except:
-    pass
-try:
-    os.mkdir('./data/db/')
-except:
-    pass
+os.makedirs('log', exist_ok=True)
+os.makedirs('data/html/', exist_ok=True)
+os.makedirs('data/db/', exist_ok=True)
 
 
 # LOGGING FUNCTION
-def log(data='', dir='./log/log_vks.txt'):
+def log(data='', dir='log/log_vks.txt'):
     open(dir, 'a', encoding="utf8").write(data + '\n')
 
 
@@ -68,22 +55,15 @@ class database:
     # CREATING NEW TABLE
     def __init__(self, tablename):
         self.dbname = tablename
-        try:
-            self.conn.execute('CREATE TABLE ' + tablename + '''
+        self.conn.execute('CREATE TABLE IF NOT EXISTS ' + tablename + '''
                         (
                         NUM	        INTEGER     NOT NULL    PRIMARY KEY  AUTOINCREMENT UNIQUE,                        
                         TIME        REAL        NOT NULL,
-                        STATE       INTEGER         NOT NULL,
-                        );
-                        ''')
-
-            log("Table '" + tablename + "' successfully created")
-        except:
-            log("Table '" + tablename + "' already exist")
+                        STATE       INTEGER         NOT NULL
+                        );''')
 
     # ADDING NEW NOTE
     def add(self, ttime, state):
-
         # SQLITE REQUEST
         self.conn.execute("INSERT INTO " + self.dbname + " (TIME,STATE) \
         VALUES (" + str(ttime) + ", " + str(state) + ")")
@@ -130,47 +110,48 @@ class person:
     # GET TARGETED PAGE
     def getpage(self):
         url = 'https://vk.com/id' + self.page_id
+
+        # GET REQUEST + CACHING PAGE INTO HTML FILE
         try:
-            # GET REQUEST + CACHING PAGE INTO HTML FILE
-            with open('./data/html/' + self.page_id + '.html', 'wb') as page_cache:
+            with open('data/html/' + self.page_id + '.html', 'wb') as page_cache:
                 page_cache.write(self.session.get(url).text.encode('utf-8'))
-        except:
+        except requests.exceptions.ConnectionError:
             # CREATING
-            with open('./data/html/' + self.page_id + '.html', 'w', encoding="utf8") as page_cache:
+            with open('data/html/' + self.page_id + '.html', 'w', encoding="utf8") as page_cache:
                 page_cache.write(
-                    '<html><body><h1>CONNECTION ERROR</h1></br>error 1: Can’t connect to server : <a '
-                    'href=\"' + url + '\">URL</a></body></html>')
+                    '<meta charset="utf-8"><html><body><h1>CONNECTION ERROR</h1> error 1: Can’t connect to server : '
+                    'requests.exceptions.ConnectionError : <a href=\"' + url + '\">URL</a></body></html>')
             log("Get request of targeted page failed [person.getpage()]")
 
     # GET 'LAST SEEN' INFO FORM CACHED HTML PAGE
     def getlastseen(self):
-        page_cache = open('./data/html/' + self.page_id + '.html', 'r', encoding="utf8")
+        page_cache = open('data/html/' + self.page_id + '.html', 'r', encoding="utf8")
         soup = BeautifulSoup(page_cache, 'lxml')
 
-        # SEARCHING 'LAST SEEN' INFORMATION
+        # SEARCHING 'LAST SEEN' INFORMATION (I know it looks disgusting but I'll change it later)
         # tls - temporary last seen note
         try:
             tls = soup.find('span', class_='pp_last_activity_offline_text').next_element
-        except:
+        except AttributeError:
             try:
                 tls = soup.find('span', class_='pp_last_activity_text').next_element
-            except:
+            except AttributeError:
                 try:
                     tls = soup.find('div', class_='profile_online_lv').next_element
-                except:
+                except AttributeError:
                     tls = 'ERROR'
 
         self.lastseen = '1' if tls == 'Online' else '2' if tls == 'ERROR' else '0'
 
     # GET NAME OF TARGETED USER FORM CACHED HTML PAGE
     def getname(self):
-        page_cache = open('./data/html/' + self.page_id + '.html', 'r', encoding="utf8")
+        page_cache = open('data/html/' + self.page_id + '.html', 'r', encoding="utf8")
         soup = BeautifulSoup(page_cache, 'lxml')
 
         # SOUP SEARCHING
         try:
             self.name = soup.find('title').next_element
-        except:
+        except AttributeError:
             self.name = 'error'
 
         # LOGGING
@@ -208,8 +189,13 @@ p.getlastseen()
 db = database(tablename="user_" + args.page_id)  # CREATING NEW TABLE IN DATABASE
 
 # UI
-print('''Tracking is started successfully
-User: ''' + p.name + '\nStatus:')
+if p.lastseen == '2':
+    print('Something gose wrong...\n',
+          'Please, check the id correctness and restart script' if p.name == ''
+          else 'Please, restart script and try to login')
+    quit()
+else:
+    print('Tracking started successfully\nUser: ' + p.name + '\nStatus:')
 
 # MAIN LOOP
 while True:

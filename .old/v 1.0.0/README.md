@@ -1,10 +1,10 @@
-# VkScrapper v 1.1.0 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
+# VkScrapper v 1.0.0 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
  
-Program for monitor your own online activity on [vk.com]
+Program for monitor your own online activity on [vk.com](https://vk.com/)
 
 ## 1. Libraries Installation
 
-Use the package manager [pip] OR inline key (-i, --install) to install necessary for script modules.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) OR inline key (-i, --install) to install necessary for script modules.
 
 ```bash
 pip install sqlite3
@@ -93,50 +93,16 @@ Status:
 Name displaying, but activity status is 'ERROR'.<br/>
 To fix it authorise as 'real' user or friend of target. 
 
-### 3. Visualizing statistic
+### 3. After
 After you collect some statistic data, you can stop script. Just close console or press Ctrl + C some times.<br>
-Now you need to analyze and/or visualize this information.
-Open main path and run script ``` converter.py ```:
-```bash
-py converter.py
-```
-If process successfully started you'll se messages like this:
-```bash
-Visualising data to graphics...
+Now you need to analyze and/or visualize this information. After next updated it'll have inline tool for this <b>[COMING SOON]</b>.<br/>
+Multiple targets support is <b>[COMING SOON]</b>.
+###### ~~Converting to HTML~~ - Not supported at last versions
 
-T01_12_2019  DONE
-T02_12_2019  DONE
-T03_12_2019  DONE
-    ( . . . )
-
-Analysing data...
-
-user_10000451.db
-T01_12_2019  DONE
-T02_12_2019  DONE
-T03_12_2019  DONE
-    ( . . . )
-
-Combining all parts to html...
-
-user_10000451.html  DONE
-
-All data successfully converted to HTML
-```
-After that you can find some .html files into main script's directory. Format of file name it 'user_%id%.html'.<br>
-Open it by any browser and enjoy.
-
-<details> <summary> Example of html file (screenshot):</summary>
- 
- ![screenshot](https://github.com/V1A0/VkScrapper/tree/master/.old/pics/example.png)
- 
-</details>
+---
 
 # Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
-
-[vk.com]: (https://vk.com/)
-[pip]:(https://pip.pypa.io/en/stable/)

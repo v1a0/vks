@@ -3,8 +3,6 @@ import argparse
 import os
 import time
 from getpass import getpass
-import re
-
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # ARGUMENTS
@@ -39,43 +37,60 @@ import requests
 from bs4 import BeautifulSoup
 
 # CREATING DIRECTORIES
-os.makedirs('log', exist_ok=True)
-os.makedirs('data/html/', exist_ok=True)
-os.makedirs('data/db/', exist_ok=True)
-os.makedirs('data/pic/', exist_ok=True)
-os.makedirs('data/info/', exist_ok=True)
+try:
+    os.mkdir('./log/')
+except:
+    pass
+try:
+    os.mkdir('data')
+except:
+    pass
+try:
+    os.mkdir('./data/html/')
+except:
+    pass
+try:
+    os.mkdir('./data/db/')
+except:
+    pass
+
+
 # LOGGING FUNCTION
-def log(data='', dir='log/log_vks.txt'):
+def log(data='', dir='./log/log_vks.txt'):
     open(dir, 'a', encoding="utf8").write(data + '\n')
 
 
 # DATABASE CLASS
 class database:
-    conn = sqlite3.connect('')
+    dbname = 'db'
+    conn = sqlite3.connect('data/db/vks.db')
 
     # CREATING NEW TABLE
     def __init__(self, tablename):
-        self.conn.execute('CREATE TABLE IF NOT EXISTS ' + tablename + '''
+        self.dbname = tablename
+        try:
+            self.conn.execute('CREATE TABLE ' + tablename + '''
                         (
                         NUM	        INTEGER     NOT NULL    PRIMARY KEY  AUTOINCREMENT UNIQUE,                        
-                        HOURS       INTEGER     NOT NULL,
-                        MINUTES     INTEGER     NOT NULL,
-                        STATE       INTEGER     NOT NULL
-                        );''')
+                        TIME        REAL        NOT NULL,
+                        STATE       INTEGER         NOT NULL,
+                        );
+                        ''')
+
+            log("Table '" + tablename + "' successfully created")
+        except:
+            log("Table '" + tablename + "' already exist")
 
     # ADDING NEW NOTE
-    def add(self, tabname, hours, mins, state):
+    def add(self, ttime, state):
+
         # SQLITE REQUEST
-
-        if tabname not in self.conn.execute("SELECT name FROM sqlite_master WHERE type='table';"):
-            self.__init__(tabname)
-
-        self.conn.execute("INSERT INTO " + tabname + " (HOURS, MINUTES, STATE) \
-        VALUES (" + hours + ", " + mins + ", " + str(state) + ")")
+        self.conn.execute("INSERT INTO " + self.dbname + " (TIME,STATE) \
+        VALUES (" + str(ttime) + ", " + str(state) + ")")
 
         # LOGGING
-        log("SQL REQ: INSERT INTO " + tabname + " (HOURS, MINUTES, STATE) \
-        VALUES (" + time.strftime("%H") + ", " + time.strftime("%M") + ", " + str(state) + ")")
+        log("SQL REQ: INSERT INTO " + self.dbname + " (TIME,STATE) VALUES (" + str(ttime) + ", " + str(
+            state) + ")")
         self.conn.commit()
 
 
@@ -115,89 +130,51 @@ class person:
     # GET TARGETED PAGE
     def getpage(self):
         url = 'https://vk.com/id' + self.page_id
-
-        # GET REQUEST + CACHING PAGE INTO HTML FILE
         try:
-            with open('data/html/' + self.page_id + '.html', 'wb') as page_cache:
+            # GET REQUEST + CACHING PAGE INTO HTML FILE
+            with open('./data/html/' + self.page_id + '.html', 'wb') as page_cache:
                 page_cache.write(self.session.get(url).text.encode('utf-8'))
-        except requests.exceptions.ConnectionError:
+        except:
             # CREATING
-            with open('data/html/' + self.page_id + '.html', 'w', encoding="utf8") as page_cache:
+            with open('./data/html/' + self.page_id + '.html', 'w', encoding="utf8") as page_cache:
                 page_cache.write(
-                    '<meta charset="utf-8"><html><body><h1>CONNECTION ERROR</h1> error 1: Can’t connect to server : '
-                    'requests.exceptions.ConnectionError : <a href=\"' + url + '\">URL</a></body></html>')
+                    '<html><body><h1>CONNECTION ERROR</h1></br>error 1: Can’t connect to server : <a '
+                    'href=\"' + url + '\">URL</a></body></html>')
             log("Get request of targeted page failed [person.getpage()]")
 
     # GET 'LAST SEEN' INFO FORM CACHED HTML PAGE
     def getlastseen(self):
-        page_cache = open('data/html/' + self.page_id + '.html', 'r', encoding="utf8")
+        page_cache = open('./data/html/' + self.page_id + '.html', 'r', encoding="utf8")
         soup = BeautifulSoup(page_cache, 'lxml')
 
-        # SEARCHING 'LAST SEEN' INFORMATION (I know it looks disgusting but I'll change it later)
+        # SEARCHING 'LAST SEEN' INFORMATION
         # tls - temporary last seen note
         try:
             tls = soup.find('span', class_='pp_last_activity_offline_text').next_element
-        except AttributeError:
+        except:
             try:
                 tls = soup.find('span', class_='pp_last_activity_text').next_element
-            except AttributeError:
+            except:
                 try:
                     tls = soup.find('div', class_='profile_online_lv').next_element
-                except AttributeError:
+                except:
                     tls = 'ERROR'
 
         self.lastseen = '1' if tls == 'Online' else '2' if tls == 'ERROR' else '0'
-        page_cache.close()
 
     # GET NAME OF TARGETED USER FORM CACHED HTML PAGE
     def getname(self):
-        page_cache = open('data/html/' + self.page_id + '.html', 'r', encoding="utf8")
+        page_cache = open('./data/html/' + self.page_id + '.html', 'r', encoding="utf8")
         soup = BeautifulSoup(page_cache, 'lxml')
 
         # SOUP SEARCHING
         try:
             self.name = soup.find('title').next_element
-        except AttributeError:
+        except:
             self.name = 'error'
 
         # LOGGING
         log("Get name request: " + self.name)
-        page_cache.close()
-
-    # GET PROFILE PICTURE
-    # tpl - temporary picture link
-    def getprofpic(self):
-        page_cache = open('data/html/' + self.page_id + '.html', 'r', encoding="utf8")
-        soup = BeautifulSoup(page_cache, 'lxml')
-        try:
-            tpl = soup.find('div', class_="owner_panel profile_panel")
-            link = re.search(r'https://\S{1,}ava=1', str(tpl)).group()
-            req = requests.get(link, stream=True)
-            if req.status_code == 200:
-                log(link + " --> " + 'data/pic/profpic_' + str(self.page_id) + '.jpeg')
-                with open('data/pic/profpic_' + str(self.page_id) + '.jpeg', 'wb') as file:
-                    for chunk in req:
-                        file.write(chunk)
-
-        except AttributeError:
-            print(self.page_id + " : page close or does not exist (can't get profile picture)")
-            log(self.page_id + " : page close or does not exist (can't get profile picture)")
-
-    # GET PROFILE INFORMATION
-    # tui - temporary user info
-    def getinfo(self):
-        open('data/info/user_' + str(self.page_id) + '.vui', 'w', encoding="utf8").write(self.name + '\n')
-
-        url = 'https://m.vk.com/id' + self.page_id + '?act=info'
-        page = self.session.get(url).text.encode('utf-8')
-        soup = BeautifulSoup(page, 'lxml')
-        tui = soup.find_all('div', class_="profile_info")
-
-        for line in tui:
-            open('data/info/user_' + str(self.page_id) + '.vui', 'a', encoding="utf8").write(str(line))
-
-
-
 
     def __str__(self):
         return '{}: id = {}, name = "{}", lastseen = "{}"'.format(self.__class__.__name__, self.page_id,
@@ -228,28 +205,18 @@ if args.password != '':  # IF PASSWORD NOT NULL
 p.getpage()
 p.getname()
 p.getlastseen()
-p.getprofpic()
-p.getinfo()
-
-db = database(tablename=time.strftime("T%d_%m_%Y"))  # CREATING NEW TABLE IN DATABASE
-db.conn = sqlite3.connect('data/db/user_' + p.page_id + '.db')
+db = database(tablename="user_" + args.page_id)  # CREATING NEW TABLE IN DATABASE
 
 # UI
-if p.lastseen == '2':
-    print('Something gose wrong...\n',
-          'Please, check the id correctness and restart script' if p.name == ''
-          else 'Please, restart script and try to login')
-    quit()
-else:
-    print('Tracking started successfully\nUser: ' + p.name + '\nStatus:')
+print('''Tracking is started successfully
+User: ''' + p.name + '\nStatus:')
 
 # MAIN LOOP
 while True:
     etime = time.time()  # ERROR TIME
     p.getpage()
     p.getlastseen()
-    db.add(hours=time.strftime("%H"), mins=time.strftime("%M"),
-           state=p.lastseen, tabname=time.strftime("T%d_%m_%Y"))
+    db.add(ttime=time.time(), state=p.lastseen)
 
     # UI
     print(time.strftime("%d-%m-%Y %H:%M:%S"), ' : ',
