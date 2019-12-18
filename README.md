@@ -11,6 +11,7 @@ pip install sqlite3
 pip install argparse
 pip install bs4
 pip install lxml
+pip install Pillow
 pip install requests
 ```
 OR
@@ -126,11 +127,11 @@ All data successfully converted to HTML
 After that you can find some .html files into main script's directory. Format of file name it 'user_%id%.html'.<br>
 Open it by any browser and enjoy.
 
-<details> <summary> Example of html file (screenshot):</summary>
- 
- ![screenshot](https://github.com/V1A0/VkScrapper/tree/master/.old/pics/example.png)
- 
-</details>
+<b> Example of html file (screenshot): </b>
+
+ <img src="https://raw.githubusercontent.com/V1A0/VkScrapper/master/.old/pics/example.png"
+     alt="example-screenshot"
+     style="float: left;" />
 
 # Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
