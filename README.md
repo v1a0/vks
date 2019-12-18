@@ -12,6 +12,7 @@ pip install argparse
 pip install bs4
 pip install lxml
 pip install requests
+pip install Pillow
 ```
 OR
 ```
