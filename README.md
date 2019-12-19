@@ -13,7 +13,6 @@ pip install bs4
 pip install lxml
 pip install Pillow
 pip install requests
-pip install Pillow
 ```
 OR
 ```
