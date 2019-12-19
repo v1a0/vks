@@ -130,14 +130,9 @@ Open it by any browser and enjoy.
 
 <b> Example of html file (screenshot): </b>
 
- <img src="https://raw.githubusercontent.com/V1A0/VkScrapper/master/.old/pics/example.png"
+ <img src="https://raw.githubusercontent.com/V1A0/VkScrapper/master/.pic/example.png"
      alt="example-screenshot"
      style="float: left;" />
-<<<<<<< HEAD
-=======
- 
-
->>>>>>> 58387a4c046159311d264e73ea93ffcccf00d56d
 
 # Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
