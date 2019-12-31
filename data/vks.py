@@ -9,7 +9,7 @@ import re
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # ARGUMENTS
 opt = argparse.ArgumentParser(description='Print an argument several times')
-opt.add_argument('-id', '--page_id', dest='page_id', type=str,
+opt.add_argument('-i', '--page_id', dest='page_id', type=str,
                  default='', metavar='1234567890',
                  help='Enter id of page (for analysis)')
 opt.add_argument('-l', '--login', dest='login', type=str,
@@ -21,7 +21,7 @@ opt.add_argument('-p', '--password', dest='password', type=str,
 opt.add_argument('-t', '--timesleep', dest='ts', type=int,
                  default='60', metavar='60',
                  help='Request frequency [sec] (default = 60)')
-opt.add_argument('-i', '--install', dest='installer', action='store_true',
+opt.add_argument('-in', '--install', dest='installer', action='store_true',
                  help='Install all necessary for script modules')
 opt.add_argument('-x', '--proxy', dest='proxy', type=str,
                  default='', metavar='https://10.10.1.0:8080',
