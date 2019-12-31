@@ -23,6 +23,9 @@ opt.add_argument('-t', '--timesleep', dest='ts', type=int,
                  help='Request frequency [sec] (default = 60)')
 opt.add_argument('-i', '--install', dest='installer', action='store_true',
                  help='Install all necessary for script modules')
+opt.add_argument('-x', '--proxy', dest='proxy', type=str,
+                 default='', metavar='https://10.10.1.0:8080',
+                 help='Proxies settings to connect. Use format "[type]://[ip]:[port]"')
 args = opt.parse_args()
 
 # MODULES INSTALLING
@@ -86,6 +89,7 @@ class person:
     page_id = '1'
     name = ''
     lastseen = ''
+    proxies = {}
 
     # PARAMETERS EDITING
     def __init__(self, **kwargs):
@@ -108,10 +112,10 @@ class person:
             'User-Agent': useragent
         }
 
-        login_get = self.session.get('https://m.vk.com/login')  # GET REQUEST OF LOGIN PAGE
+        login_get = self.session.get('https://m.vk.com/login', headers=headers, proxies=self.proxies)  # GET REQUEST OF LOGIN PAGE
         soup = BeautifulSoup(login_get.content, 'lxml')  # SOUP
         login_form = soup.find('form')['action']  # FINDING LOGIN FORM
-        self.session.post(login_form, data=payload, headers=headers)  # POST REQUEST + SESSION SAVING
+        self.session.post(login_form, data=payload, headers=headers, proxies=self.proxies)  # POST REQUEST + SESSION SAVING
 
     # GET TARGETED PAGE
     def getpage(self):
@@ -120,7 +124,7 @@ class person:
         # GET REQUEST + CACHING PAGE INTO HTML FILE
         try:
             with open('data/html/' + self.page_id + '.html', 'wb') as page_cache:
-                page_cache.write(self.session.get(url).text.encode('utf-8'))
+                page_cache.write(self.session.get(url, proxies=self.proxies).text.encode('utf-8'))
         except requests.exceptions.ConnectionError:
             # CREATING
             with open('data/html/' + self.page_id + '.html', 'w', encoding="utf8") as page_cache:
@@ -173,7 +177,7 @@ class person:
         try:
             tpl = soup.find('div', class_="owner_panel profile_panel")
             link = re.search(r'https://\S{1,}ava=1', str(tpl)).group()
-            req = requests.get(link, stream=True)
+            req = requests.get(link, stream=True, proxies=self.proxies)
             if req.status_code == 200:
                 log(link + " --> " + 'data/pic/profpic_' + str(self.page_id) + '.jpeg')
                 with open('data/pic/profpic_' + str(self.page_id) + '.jpeg', 'wb') as file:
@@ -190,7 +194,7 @@ class person:
         open('data/info/user_' + str(self.page_id) + '.vui', 'w', encoding="utf8").write(self.name + '\n')
 
         url = 'https://m.vk.com/id' + self.page_id + '?act=info'
-        page = self.session.get(url).text.encode('utf-8')
+        page = self.session.get(url, proxies=self.proxies).text.encode('utf-8')
         soup = BeautifulSoup(page, 'lxml')
         tui = soup.find_all('div', class_="profile_info")
 
@@ -217,11 +221,22 @@ if args.login == '' or args.password == '':
         args.login = input("Enter login: ")
         args.password = getpass('Enter password: ')
 
+# PROXY SET
+proxy = {}
+if 'https' in args.proxy:
+    proxy.update({'https': args.proxy})
+else:
+    if 'http' in args.proxy:
+        proxy.update({'http': args.proxy})
+if 'ftp' in args.proxy:
+    proxy.update({'ftp': args.proxy})
+
 # LOGGING
 log('- ' * 46 + '\n' + time.strftime("%d-%m-%Y %H:%M:%S") + ' : New tracking session : ' + args.page_id)
+log("Proxy settings:" + str(proxy)) if proxy else log("(No proxies)")
 
 # CREATING A TARGET
-p = person(page_id=args.page_id)  # SET ID
+p = person(page_id=args.page_id, proxies=proxy)  # SET ID
 if args.password != '':  # IF PASSWORD NOT NULL
     p.loginsession(args.login, args.password)  # LOGIN REQUEST + SESSION
     del args.password  # REMOVING PASSWORD FROM MEMORY
@@ -261,4 +276,4 @@ while True:
 
     # TIME FIXING AND PAUSE
     etime -= time.time()
-    time.sleep(args.ts + etime)
+    time.sleep(args.ts + etime if abs(etime) < args.ts else args.ts)
