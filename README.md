@@ -1,10 +1,10 @@
-# VkScrapper v 1.1.0 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
+# VkScrapper v 1.1.1 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
  
 Program for monitor your own online activity on [vk.com]
 
-## 1. Libraries Installation
+## 1. Libraries Installatior
 
-Use the package manager [pip] OR inline key (-i, --install) to install necessary for script modules.
+Use the package manager [pip] OR inline key (-in, --install) to install necessary for script modules.
 
 ```bash
 pip install sqlite3
@@ -55,13 +55,14 @@ Status:
 #### 2.2. Second way - Manual
 For run use python and some arguments:
 ```bash
-py vks.py -id 10000451 -l +71234567890 -p pwned1234 -t 60
+py vks.py -id 10000451 -l +71234567890 -p pwned1234 -x https://10.10.1.0:8080 -t 60
 ```
 Arguments list:
-- `-i` / `--install` -  install all necessary for script modules <b>[first run]</b>,
-- `-id` / `--page_id` - id,
+- `-in` / `--install` -  install all necessary for script modules <b>[first run]</b>,
+- `-i` / `--page_id` - id,
 - `-l` / `--login` - phone or email,
 - `-p` / `--password` - password,
+- `-x` / `----proxy` - proxies settings (format: `type`://`ip`:`port`)
 - `-t` / `--timesleep` - request frequency (sec) <b>[debug tool]</b>
 
 
