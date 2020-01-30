@@ -1,10 +1,13 @@
+"""
+VKS v 1.1.3
+"""
+
 # -*- coding: utf-8 -*-
 import argparse
 import os
 import time
 from getpass import getpass
 import re
-
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 # ARGUMENTS
@@ -48,10 +51,15 @@ os.makedirs('data/html/', exist_ok=True)
 os.makedirs('data/db/', exist_ok=True)
 os.makedirs('data/pic/', exist_ok=True)
 os.makedirs('data/info/', exist_ok=True)
-# LOGGING FUNCTION
-def log(data='', dir='log/log_vks.txt'):
-    open(dir, 'a', encoding="utf8").write(data + '\n')
 
+
+# LOGGING FUNCTION
+def log(data='', dir='log/log_vks.txt', error=''):
+    if error:
+        open(dir, 'a', encoding="utf8").write(
+        "[!] ERROR [!]\n" + str(error) + '\n')
+
+    open(dir, 'a', encoding="utf8").write(data + '\n')
 
 # DATABASE CLASS
 class database:
@@ -112,10 +120,12 @@ class person:
             'User-Agent': useragent
         }
 
-        login_get = self.session.get('https://m.vk.com/login', headers=headers, proxies=self.proxies)  # GET REQUEST OF LOGIN PAGE
+        login_get = self.session.get('https://m.vk.com/login', headers=headers,
+                                     proxies=self.proxies)  # GET REQUEST OF LOGIN PAGE
         soup = BeautifulSoup(login_get.content, 'lxml')  # SOUP
         login_form = soup.find('form')['action']  # FINDING LOGIN FORM
-        self.session.post(login_form, data=payload, headers=headers, proxies=self.proxies)  # POST REQUEST + SESSION SAVING
+        self.session.post(login_form, data=payload, headers=headers,
+                          proxies=self.proxies)  # POST REQUEST + SESSION SAVING
 
     # GET TARGETED PAGE
     def getpage(self):
@@ -201,9 +211,6 @@ class person:
         for line in tui:
             open('data/info/user_' + str(self.page_id) + '.vui', 'a', encoding="utf8").write(str(line))
 
-
-
-
     def __str__(self):
         return '{}: id = {}, name = "{}", lastseen = "{}"'.format(self.__class__.__name__, self.page_id,
                                                                   self.name, self.lastseen)
@@ -261,19 +268,25 @@ else:
 
 # MAIN LOOP
 while True:
-    etime = time.time()  # ERROR TIME
-    p.getpage()
-    p.getlastseen()
-    db.add(hours=time.strftime("%H"), mins=time.strftime("%M"),
-           state=p.lastseen, tabname=time.strftime("T%d_%m_%Y"))
+    try:
+        etime = time.time()  # ERROR TIME
+        p.getpage()
+        p.getlastseen()
+        db.add(hours=time.strftime("%H"), mins=time.strftime("%M"),
+               state=p.lastseen, tabname=time.strftime("T%d_%m_%Y"))
 
-    # UI
-    print(time.strftime("%d-%m-%Y %H:%M:%S"), ' : ',
-          'Online' if p.lastseen == '1' else 'Offline' if p.lastseen == '0' else 'ERROR')
+        # UI
+        print(time.strftime("%d-%m-%Y %H:%M:%S"), ' : ',
+              'Online' if p.lastseen == '1' else 'Offline' if p.lastseen == '0' else 'ERROR')
 
-    # LOGGING
-    log(time.strftime("%d-%m-%Y %H:%M:%S") + ' : ' + str(p))
+        # LOGGING
+        log(time.strftime("%d-%m-%Y %H:%M:%S") + ' : ' + str(p))
 
-    # TIME FIXING AND PAUSE
-    etime -= time.time()
-    time.sleep(args.ts + etime if abs(etime) < args.ts else args.ts)
+        # TIME FIXING AND PAUSE
+        etime -= time.time()
+        time.sleep(args.ts + etime if abs(etime) < args.ts else args.ts)
+
+
+    except NameError as error:
+        log(error=str(error))
+        print("!ERROR\n", error)
