@@ -1,5 +1,5 @@
 """
-VKS v 1.1.3
+VKS v 1.1.3 plus
 """
 
 # -*- coding: utf-8 -*-
@@ -135,13 +135,13 @@ class person:
         try:
             with open('data/html/' + self.page_id + '.html', 'wb') as page_cache:
                 page_cache.write(self.session.get(url, proxies=self.proxies).text.encode('utf-8'))
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as _error:
             # CREATING
             with open('data/html/' + self.page_id + '.html', 'w', encoding="utf8") as page_cache:
                 page_cache.write(
                     '<meta charset="utf-8"><html><body><h1>CONNECTION ERROR</h1> error 1: Can’t connect to server : '
                     'requests.exceptions.ConnectionError : <a href=\"' + url + '\">URL</a></body></html>')
-            log("Get request of targeted page failed [person.getpage()]")
+            log(data="Get request of targeted page failed [person.getpage()]", error=_error.__str__())
 
     # GET 'LAST SEEN' INFO FORM CACHED HTML PAGE
     def getlastseen(self):
@@ -172,8 +172,9 @@ class person:
         # SOUP SEARCHING
         try:
             self.name = soup.find('title').next_element
-        except AttributeError:
+        except AttributeError as _error:
             self.name = 'error'
+            log(error=_error.__str__())
 
         # LOGGING
         log("Get name request: " + self.name)
@@ -194,9 +195,10 @@ class person:
                     for chunk in req:
                         file.write(chunk)
 
-        except AttributeError:
-            print(self.page_id + " : page close or does not exist (can't get profile picture)")
-            log(self.page_id + " : page close or does not exist (can't get profile picture)")
+        except AttributeError as _error:
+            print(_error, self.page_id + " : page close or does not exist (can't get profile picture)")
+            log(data = self.page_id + " : page close or does not exist (can't get profile picture)", error=_error.__str__())
+
 
     # GET PROFILE INFORMATION
     # tui - temporary user info
@@ -287,6 +289,6 @@ while True:
         time.sleep(args.ts + etime if abs(etime) < args.ts else args.ts)
 
 
-    except NameError as error:
-        log(error=str(error))
-        print("!ERROR\n", error)
+    except NameError as _error:
+        log(error=_error.__str__())
+        print("!ERROR\n", _error.__str__())
