@@ -1,4 +1,4 @@
-# VkScrapper v 1.1.2 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
+# VkScrapper v 1.1.3 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
  
 Program for monitor your own online activity on [vk.com]
 
@@ -81,7 +81,10 @@ Status:
 Don't close the terminal until you didn't get enough data to analise.
 
 
-#### 2.3. Errors and how to fix ⚠
+#### 2.3 Errors and how to fix ⚠
+
+##### 2.3.1 Status error
+
 If user hiding his page from anonymous visits, you'll see messages like this:
 ```bash
 Tracking is started successfully
@@ -94,6 +97,11 @@ Status:
 ```
 Name displaying, but activity status is 'ERROR'.<br/>
 To fix it authorise as 'real' user or friend of target. 
+
+#### 2.3.2 Any other errors 
+
+Read information about error into data\log\log_vks.txt
+Try to fix it by yourself
 
 ### 3. Visualizing statistic
 After you collect some statistic data, you can stop script. Just close console or press Ctrl + C some times.<br>
