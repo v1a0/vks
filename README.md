@@ -1,22 +1,29 @@
-# VkScrapper v 1.1.3 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
+# VkScrapper v 1.1.4 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) ![License:MIT](https://img.shields.io/github/license/V1A0/VkScrapper)
  
 Program for monitor your own online activity on [vk.com]
 
-## 1. Libraries Installatior
+## Update 1.1.4 - What's new?
+1. Support multiple targets
+2. Better error logging
+3. Not support inline arguments anymore
+4. Code refactoring
+5. Bugfix
 
-Use the package manager [pip] OR inline key (-in, --install) to install necessary for script modules.
+## 1. Libraries Installation
+
+Use the package manager [pip] to install necessary for script modules.
 
 ```bash
 pip install sqlite3
-pip install argparse
 pip install bs4
 pip install lxml
 pip install Pillow
 pip install requests
 ```
-OR
+OR add parameter `"1"` for key `install` into file `target_data.json`
 ```
-py vks.py --install
+...
+"install" : "1",
 ```
 
 
@@ -52,33 +59,56 @@ Status:
 ```
 ---
 
-#### 2.2. Second way - Manual
-For run use python and some arguments:
-```bash
-py vks.py -id 10000451 -l +71234567890 -p pwned1234 -x https://10.10.1.0:8080 -t 60
+#### 2.2. Second way - Advanced
+##### 2.2.1 Open `target_data.json` and add some arguments into it: Target id (might be a few), login and password (optional), proxy settings (optional).
+Example:
+
+```json
+{
+  "id" : ["10000451", "19668908"],
+  "login" : "79998887766",
+  "password" : "mypaswd1234",
+  "proxy" : {"https": "127.0.0.1:8080"},
+  "sleep_time" : 60,
+  "install" : ""
+}
 ```
-Arguments list:
-- `-in` / `--install` -  install all necessary for script modules <b>[first run]</b>,
-- `-i` / `--page_id` - id,
-- `-l` / `--login` - phone or email,
-- `-p` / `--password` - password,
-- `-x` / `----proxy` - proxies settings (format: `type`://`ip`:`port`)
-- `-t` / `--timesleep` - request frequency (sec) <b>[debug tool]</b>
 
+##### 2.2.2. After this save file and run the program use python:
+```bash
+py vks.py
+```
 
-Script use login data only once, to create a session. After that password is erasing and will never be appear in memory.<br/>
-If tracking session started successfully you'll get message like that in your terminal:
+Script use login data only once, to create a session. After that password is erasing from program's memory. Also you can delete it from 
+`target_data.json` or enter it just use UI (p 2.1 - First way - UI). For this just leave empty "password" parameter. <br/>
+If tracking session started successfully you'll get message in your terminal like this:
 ```bash
 Tracking is started successfully
 User: Guy Montag
-Status:
-05-01-1984 13:37:42  :  Offline
-05-01-1984 13:38:42  :  Offline
-05-01-1984 13:39:42  :  Online
-05-01-1984 13:40:42  :  Online
+Tracking is started successfully
+User: Satoshi Nakamoto
 
+Status:
+05-01-1984 13:37:42  :  Offline (Guy Montag)
+05-01-1984 13:37:43  :  Online (Satoshi Nakamoto)
+05-01-1984 13:38:42  :  Online (Guy Montag)
+05-01-1984 13:38:43  :  Offline (Satoshi Nakamoto)
+05-01-1984 13:39:42  :  Online (Guy Montag)
+05-01-1984 13:39:43  :  Offline (Satoshi Nakamoto)
 ```
 Don't close the terminal until you didn't get enough data to analise.
+
+---
+If you have only one target your terminal will be looks like this
+```bush
+Tracking is started successfully
+User: Guy Montag
+Status:
+05-01-1984 13:37:42  :  Offline (Guy Montag)
+05-01-1984 13:38:42  :  Offline (Guy Montag)
+05-01-1984 13:39:42  :  Online (Guy Montag)
+05-01-1984 13:40:42  :  Online (Guy Montag)
+```
 
 
 #### 2.3 Errors and how to fix ⚠
@@ -101,7 +131,7 @@ To fix it authorise as 'real' user or friend of target.
 ##### 2.3.2 Any other errors 
 
 Read information about error into data\log\log_vks.txt
-Try to fix it by yourself
+Try to fix it by yourself or [send bug report](https://github.com/V1A0/VkScrapper/issues/new)
 
 ### 3. Visualizing statistic
 After you collect some statistic data, you can stop script. Just close console or press Ctrl + C some times.<br>
@@ -114,17 +144,17 @@ If process successfully started you'll se messages like this:
 ```bash
 Visualising data to graphics...
 
-T01_12_2019  DONE
-T02_12_2019  DONE
-T03_12_2019  DONE
+T01_12_1984  DONE
+T02_12_1984  DONE
+T03_12_1984  DONE
     ( . . . )
 
 Analysing data...
 
 user_10000451.db
-T01_12_2019  DONE
-T02_12_2019  DONE
-T03_12_2019  DONE
+T01_12_1984  DONE
+T02_12_1984  DONE
+T03_12_1984  DONE
     ( . . . )
 
 Combining all parts to html...
