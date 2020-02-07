@@ -10,13 +10,14 @@ import json
 
 # GET DATA FROM JSON
 target_data = json.load(open('target_data.json', 'r'))
-page_id = target_data["id"]
-login = target_data["login"]
-password = target_data["password"]
-proxy = target_data["proxy"]
-st = target_data["sleep_time"]
-install = target_data["install"]
+page_id = target_data.get("id") if target_data.get("id") else []
+login = target_data.get("login")
+password = target_data.get("password")
+proxy = target_data.get("proxy")
+st = target_data.get("sleep_time")
+install = target_data.get("install")
 del target_data
+
 
 # MODULES INSTALLING
 if install == '1':
@@ -215,7 +216,7 @@ class person:
 os.system('cls' if os.name == 'nt' else 'clear')  # Clear the console
 
 # USER INTERFACE (UI)
-while not page_id:
+while not page_id[0]:
     page_id[0] = input('Enter user id: ')
 
 if not login or not password:
