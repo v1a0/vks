@@ -1,7 +1,8 @@
-"""
-VKS v 1.1.4
-"""
 # -*- coding: utf-8 -*-
+"""
+VKS v 1.1.4 plus
+"""
+
 import os
 import time
 from getpass import getpass
@@ -9,14 +10,14 @@ import re
 import json
 
 # GET DATA FROM JSON
-target_data = json.load(open('target_data.json', 'r'))
-page_id = target_data.get("id") if target_data.get("id") else []
-login = target_data.get("login")
-password = target_data.get("password")
-proxy = target_data.get("proxy")
-st = target_data.get("sleep_time")
-install = target_data.get("install")
-del target_data
+config = json.load(open('config.json', 'r'))
+page_id = config.get("id") if config.get("id") else []
+login = config.get("login")
+password = config.get("password")
+proxy = config.get("proxy")
+st = config.get("sleep_time")
+install = config.get("install")
+del config
 
 
 # MODULES INSTALLING
