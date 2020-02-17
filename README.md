@@ -20,7 +20,7 @@ pip install lxml
 pip install Pillow
 pip install requests
 ```
-OR add parameter `"1"` for key `install` into file `target_data.json`
+OR add parameter `"1"` for key `install` into file `config.json`
 ```
 ...
 "install" : "1",
@@ -60,7 +60,7 @@ Status:
 ---
 
 #### 2.2. Second way - Advanced
-##### 2.2.1 Open `target_data.json` and add some arguments into it: Target id (might be a few), login and password (optional), proxy settings (optional).
+##### 2.2.1 Open `config.json` and add some arguments into it: Target id (might be a few), login and password (optional), proxy settings (optional).
 Example:
 
 ```json
@@ -80,7 +80,7 @@ py vks.py
 ```
 
 Script use login data only once, to create a session. After that password is erasing from program's memory. Also you can delete it from 
-`target_data.json` or enter it just use UI (p 2.1 - First way - UI). For this just leave empty "password" parameter. <br/>
+`config.json` or enter it just use UI (p 2.1 - First way - UI). For this just leave empty "password" parameter. <br/>
 If tracking session started successfully you'll get message in your terminal like this:
 ```bash
 Tracking is started successfully
