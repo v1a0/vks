@@ -10,9 +10,9 @@
 
 
   "[!] --->  E X A M P L E  <--- [!]" : {
-      "id" : ["123456789", "987654321", "192873645", "(enter user id here)"],
-      "login" : "79998887766 (enter you login here)",
-      "password" : "paswd1337 (enter your password here)",
+      "id" : ["123456789", "987654321", "192873645"],
+      "login" : "79998887766",
+      "password" : "paswd1337",
       "proxy" : {"http": "127.0.0.1:80", "https": "127.0.0.1:8080", "ftp": "127.0.0.1:20"},
       "sleep_time" : 60,
       "install" : ""

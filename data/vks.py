@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-VKS v 1.1.4 plus
+VKS v 1.1.5
 """
 
 import os
@@ -203,10 +203,46 @@ class person:
         url = 'https://m.vk.com/id{0:s}?act=info'.format(self.page_id)
         page = self.session.get(url, proxies=self.proxies).text.encode('utf-8')
         soup = BeautifulSoup(page, 'lxml')
-        tui = soup.find_all('div', class_="profile_info")
+        #tui = soup.find_all('div', class_="profile_info")
 
-        for line in tui:
-            open('data/info/user_{0:s}.vui'.format(self.page_id), 'a', encoding="utf8").write(str(line))
+        title = ['Name']
+        info = [self.name]
+        menu = soup.find('div', class_="profile_info_cont").find_all('a')
+        eng_ = {"Friends": "Friends",
+                      "Друзья": "Friends",
+                      "Photos": "Photos",
+                      "Фотографии": "Photos",
+                      "Videos": "Videos",
+                      "Видео": "Videos",
+                      "Music": "Music",
+                      "Музыка": "Music",
+                      "Аудиозаписи": "Music",
+                      "Following": "Following",
+                      "Подписки": "Following"
+                      }
+
+        for i in menu:
+                title.append(eng_.get(i.find('div', class_="Menu__itemTitle").text))
+                print(i.find('div', class_="Menu__itemTitle").text)
+                info.append(i.find('div', class_="Menu__itemCount").text)
+
+        try:
+            results_ = json.load(open('data/info/user_{0:s}.json'.format(self.page_id), 'r'))
+        except FileNotFoundError:
+            results_ = dict()
+            #data/info/user_23444989.json
+
+        results_.update(zip(title, info))
+
+        print(results_)
+
+        with open('data/info/user_{0:s}.json'.format(self.page_id), 'w') as outfile:
+            json.dump(results_, outfile)
+
+
+        #for line in tui:
+        #    open('data/info/user_{0:s}.vui'.format(self.page_id), 'a', encoding="utf8").write(str(line))
+
 
     def __str__(self):
         return '{0:s}: id = {1:s}, name = "{2:s}", lastseen = "{3:s}"'.format(self.__class__.__name__, self.page_id,

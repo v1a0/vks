@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import sqlite3
 import datetime
+import json
 from os import walk, makedirs
 
 
@@ -15,39 +16,41 @@ class person(statistic):
     user_id = ''
     pic = ''
     profpic = 'data/pic/'
-    about = ''
+    about = {}
 
     def mk_statistic(self, date, path, alt):
         return """
         <p><details><summary>
-{}
+{0}
             </summary><br/><img class = "stat" src = "data/pic/
-{}
+{1}
             " alt = "
-{}
+{2}
             " width=75% /><br/><br/><br/>Online activity percentage:
-{} %
+{3} %
             <br/><br/>Maximum session duration:
-{} minutes
+{4} minutes
             <br/><br/>Minimum session duration:
-{} minutes
+{5} minutes
 <br><br><br></details>
                   """.format(date, path, alt, self.oap, self.maxsd, self.minsd)
 
-    def mk_hat(self, name, content):
-
+    def mk_hat(self, content):
         return_ = """
         <aside><img src = "data/pic/
-{}
+{0}
         " alt = "
-{}
-        " style=" float:right; margin: 1% 5% 0px 0px;cursor:pointer; cursor:hand; width: 200px"/></aside><article><p><dir class="username">
-{}
-</dir></article><br><article>""".format(self.pic, self.pic, name)
+{1}
+        " class="ProfilePic"/></aside><article><p><dir class="username">
+{2}
+</dir></article><br><article>
+""".format(self.pic, self.pic, content.get('Name'), )
 
-        lines = []
-        for item in content:
-            return_ += item.replace("\n", '')
+        for title in content:
+            if title != 'Name':
+                return_ += """
+                <div class="Menu__itemTitle">{0}:   <a class="Menu__itemCount">{1}</a></div>
+                """.format(title, content[title])
 
         return_ += "</article>"
 
@@ -178,7 +181,6 @@ def mkstat():
                         result = ' ' + str(stat[j].oap * 100)[:5] + ' ' + str(stat[j].maxsd) + ' ' + str(
                             stat[j].minsd) + '\n'
 
-
                     open('data/info/' + dbfile[:-3] + '.vus', 'a', encoding="utf8").write(stat[j].date + result)
                     j += 1
 
@@ -201,15 +203,20 @@ def mkhtml():
     for ids in idsdir:
         p = person()
         p.user_id = ids[5:-3]
-        p.pic = 'profpic_' + p.user_id + '.jpeg'
-        p.profpic = 'data/pic/user_' + p.user_id
-        p.about = 'data/info/user_' + p.user_id + '.vui'
+        p.pic = 'profpic_{0}.jpeg'.format(p.user_id)
+        p.profpic = 'data/pic/user_{0}'.format(p.user_id)
+        p.about = json.load(open('data/info/user_{0}.json'.format(p.user_id), 'r'))
 
         stat = open('data/info/user_' + p.user_id + '.vus', 'r', encoding="utf8")
-        info = open('data/info/user_' + p.user_id + '.vui', 'r', encoding="utf8")
+        # FIXIT
+
+        # info = open('data/info/user_' + p.user_id + '.vui', 'r', encoding="utf8")
+        # info = json.load('data/info/user_{0}.json'.format(p.user_id))
+
         html = open('user_' + p.user_id + '.html', 'w', encoding="utf8")
         example = open('templates/defaultpage.html', 'r', encoding="utf8")
-        hat = p.mk_hat(info.readline(), info.readlines())
+        hat = p.mk_hat(p.about)
+
         for line in example.readlines():
             if line == '<!-- %USERDATA% -->\n':
                 html.write(hat)
@@ -233,7 +240,6 @@ def mkhtml():
             else:
                 html.write(line)
         stat.close()
-        info.close()
         html.close()
         example.close()
         print('user_' + p.user_id + '.html', ' DONE')

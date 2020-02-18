@@ -1,6 +1,7 @@
 html {
 	font: 18px/1 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	color: #FFFFFF;
+	box-sizing: border-box;
 }
 
 li a {
@@ -60,6 +61,7 @@ h1 {
 h2 {
 	font-size: 2em;
 	line-height: 1.3;
+
 }
 
 h3 {
@@ -68,15 +70,24 @@ h3 {
 }
 
 .content {
+	width: 65%;
+	min-width: 33em;
+	max-width: 80em;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 80px;
+}
+
+content a {
+	color: #969696;
+}
+
+.userinfo {
 	margin-left: auto;
 	margin-right: auto;
 	width: 65%;
 	min-width: 33em;
 	max-width: 80em;
-}
-
-content a {
-	color: #969696;
 }
 
 .details {
@@ -186,13 +197,6 @@ h4.slim_header {
     font: 20px/0.1 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	color: #FFFFFF;
 }
-.profile_info {
-    background-color: #3F4448;
-	padding: 0.2em 0px 0.2em 0px;
-    font-size: 1em;
-	text-align: left;
-	text-shadow: 2px 2px #0a2911;
-}
 
 
 img {
@@ -222,12 +226,30 @@ dt {
     padding: 0em 0px 1em 0px;
 }
 
-.pm_counter {
+.Menu__itemCount {
     background-color: #24292E;
-    padding: 0.2em 0.4em 0.2em 0.3em;
+    padding: 0.2em 1.5em 0.2em 1.5em;
     text-align: center;
     border-radius: 10px;
     color: #F1F4FF;
+
+}
+
+.Menu__itemTitle {
+    background-color: #3F4448;
+	padding: 0.6em 0px 0.6em 0px;
+    font-size: 1.1em;
+	text-align: left;
+	text-shadow: 2px 2px #0a2911;
+}
+
+img.ProfilePic {
+    float: right;
+    margin: 1% 5% 0px 0px;
+    cursor:hand;
+    overflow:auto;
+    width: 200px;
+    height: auto;
 }
 
 
