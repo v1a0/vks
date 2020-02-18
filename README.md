@@ -179,7 +179,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 
 ## OLD UPDs
-### Update 1.1.5 - What's new?
+### Update 1.1.4 - What's new?
 1. Support multiple targets
 2. Better error logging
 3. Not support inline arguments anymore
