@@ -223,7 +223,6 @@ class person:
 
         for i in menu:
                 title.append(eng_.get(i.find('div', class_="Menu__itemTitle").text))
-                print(i.find('div', class_="Menu__itemTitle").text)
                 info.append(i.find('div', class_="Menu__itemCount").text)
 
         try:
@@ -233,8 +232,6 @@ class person:
             #data/info/user_23444989.json
 
         results_.update(zip(title, info))
-
-        print(results_)
 
         with open('data/info/user_{0:s}.json'.format(self.page_id), 'w') as outfile:
             json.dump(results_, outfile)
