@@ -20,29 +20,27 @@ class person(statistic):
 
     def mk_statistic(self, date, path, alt):
         return f"""
-        <p>
             <details>
-                <summary>{date}</summary><br>
-                <img class = "stat" src = "data/pic/{path}" alt = "{alt}" width=75%><br><br><br>
-                Online activity percentage: {self.oap} %<br><br>
-                Maximum session duration: {self.maxsd} minutes<br><br>
-                Minimum session duration: {self.minsd} minutes<br><br><br>
+                <summary>{date}</summary>
+                <img class = "stat" src = "data/pic/{path}" alt = "{alt}" width=75%>
+                <div class="dayinfo">
+                Online activity percentage: {self.oap} %
+                </div>
+                
+                <div class="dayinfo">
+                Maximum session duration: {self.maxsd} minutes
+                </div>
+                                
+                <div class="dayinfo">
+                Minimum session duration: {self.minsd} minutes
+                </div>
             </details>
-        </p>
 """
 
     def mk_hat(self, content):
         return_ = f"""
-        <aside>
-            <img src = "data/pic/{self.pic}" alt = "{self.pic}" class="ProfilePic">
-        </aside>
-        
-        <article>
-            <p>
-                <dir class="username">{content.get('Name')}</dir>
-            </p>        
-        </article>
-        <br>
+            <div class="userinfo">
+                <div class="username">{content.get('Name')}</div>
 """
 
         for title in content:
@@ -52,7 +50,15 @@ class person(statistic):
                     {title}:   <a class="Menu__itemCount">{content[title]}</a>
                 </div>"""
 
-        return_ += "</article>"
+
+
+        return_ += f"""
+            </div>
+        
+            <div class="profpic">
+                <img src = "data/pic/{self.pic}" alt = "{self.pic}" class="profpic">
+            </div>
+        """
 
         return return_
 
@@ -218,9 +224,9 @@ def mkhtml():
         hat = p.mk_hat(p.about)
 
         for line in example.readlines():
-            if line == '<!-- %USERDATA% -->\n':
+            if '<!-- %USERDATA% -->\n' in line:
                 html.write(hat)
-            elif line == '<!-- %STATDATA% -->\n':
+            elif '<!-- %STATDATA% -->\n' in line:
                 for stat_line in stat.readlines():
                     element = stat_line.replace('_', ' ').split()
                     day = element[0]
