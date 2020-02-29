@@ -46,7 +46,7 @@ os.makedirs('data/info/', exist_ok=True)
 def log(data='', dir='log/log_vks.txt', error=''):
     if error:
         open(dir, 'a', encoding="utf8").write(
-            "[!] ERROR [!]  \n{0:s}  \n".format(error))
+            f"[!] ERROR [!]  \n{error}  \n")
 
     open(dir, 'a', encoding="utf8").write(data + '\n')
 
@@ -69,18 +69,17 @@ class database:
     def add(self, id, tabname, hours, mins, state):
         # SQLITE REQUEST
 
-        self.conn = sqlite3.connect('data/db/user_{0:s}.db'.format(id))
+        self.conn = sqlite3.connect(f'data/db/user_{id}.db')
 
         if tabname not in self.conn.execute("SELECT name FROM sqlite_master WHERE type='table';"):
             self.__init__(tabname)
 
-        self.conn.execute("INSERT INTO {0:s} (HOURS, MINUTES, STATE) \
-                VALUES ({1:s}, {2:s}, {3:s})".format(tabname, hours, mins, state))
+        self.conn.execute(f"INSERT INTO {tabname} (HOURS, MINUTES, STATE) \
+                VALUES ({hours}, {mins}, {state})")
 
         # LOGGING
-        log("SQL REQ: INSERT INTO {0:s} (HOURS, MINUTES, STATE) \
-                VALUES ({1:s}, {2:s}, {3:s})".format(
-            tabname, time.strftime("%H"), time.strftime("%M"), state))
+        log(f"SQL REQ: INSERT INTO {tabname} (HOURS, MINUTES, STATE) \
+                VALUES ({time.strftime('%H')}, {time.strftime('%M')}, {state})")
 
         self.conn.commit()
 
@@ -127,20 +126,20 @@ class person:
 
         # GET REQUEST + CACHING PAGE INTO HTML FILE
         try:
-            with open('data/html/{0:s}.html'.format(self.page_id), 'wb') as page_cache:
+            with open(f'data/html/{self.page_id}.html', 'wb') as page_cache:
                 page_cache.write(self.session.get(url, proxies=self.proxies).text.encode('utf-8'))
 
         except requests.exceptions.ConnectionError as _error:
             # CREATING
-            with open('data/html/{0:s}.html'.format(self.page_id), 'w', encoding="utf8") as page_cache:
+            with open(f'data/html/{self.page_id}.html', 'w', encoding="utf8") as page_cache:
                 page_cache.write(
                     '<meta charset="utf-8"><html><body><h1>CONNECTION ERROR</h1> error 1: Can’t connect to server : '
-                    'requests.exceptions.ConnectionError : <a href=\"{0:s}\">URL</a></body></html>'.format(url))
+                    f'requests.exceptions.ConnectionError : <a href=\"{url}\">URL</a></body></html>')
             log(data="Get request of targeted page failed [person.getpage()]", error=_error.__str__())
 
     # GET 'LAST SEEN' INFO FORM CACHED HTML PAGE
     def getlastseen(self):
-        page_cache = open('data/html/{0:s}.html'.format(self.page_id), 'r', encoding="utf8")
+        page_cache = open(f'data/html/{self.page_id}.html', 'r', encoding="utf8")
         soup = BeautifulSoup(page_cache, 'lxml')
 
         # SEARCHING 'LAST SEEN' INFORMATION (I know it looks disgusting but I'll change it later)
@@ -161,7 +160,7 @@ class person:
 
     # GET NAME OF TARGETED USER FORM CACHED HTML PAGE
     def getname(self):
-        page_cache = open('data/html/{0:s}.html'.format(self.page_id), 'r', encoding="utf8")
+        page_cache = open(f'data/html/{self.page_id}.html', 'r', encoding="utf8")
         soup = BeautifulSoup(page_cache, 'lxml')
 
         # SOUP SEARCHING
@@ -178,29 +177,29 @@ class person:
     # GET PROFILE PICTURE
     # tpl - temporary picture link
     def getprofpic(self):
-        page_cache = open('data/html/{0:s}.html'.format(self.page_id), 'r', encoding="utf8")
+        page_cache = open(f'data/html/{self.page_id}.html', 'r', encoding="utf8")
         soup = BeautifulSoup(page_cache, 'lxml')
         try:
             tpl = soup.find('div', class_="owner_panel profile_panel")
             link = re.search(r"https://\S{1,}ava=1", str(tpl)).group()
             req = requests.get(link, stream=True, proxies=self.proxies)
             if req.status_code == 200:
-                log("{0:s} --> data/pic/profpic_{1:s}.jpeg".format(link, self.page_id))
-                with open('data/pic/profpic_{0:s}.jpeg'.format(self.page_id), 'wb') as file:
+                log(f"{link} --> data/pic/profpic_{self.page_id}.jpeg")
+                with open(f'data/pic/profpic_{self.page_id}.jpeg', 'wb') as file:
                     for chunk in req:
                         file.write(chunk)
 
         except AttributeError as _error:
-            print("{0} {1} : page close or does not exist (can't get profile picture)".format(_error, self.page_id))
-            log(data="{0:s} : page close or does not exist (can't get profile picture)".format(self.page_id),
+            print(f"{_error} {self.page_id} : page close or does not exist (can't get profile picture)")
+            log(data=f"{self.page_id} : page close or does not exist (can't get profile picture)",
                 error=_error.__str__())
 
     # GET PROFILE INFORMATION
     # tui - temporary user info
     def getinfo(self):
-        open('data/info/user_{0:s}.vui'.format(self.page_id), 'w', encoding="utf8").write(self.name + '\n')
+        open(f'data/info/user_{self.page_id}.vui', 'w', encoding="utf8").write(self.name + '\n')
 
-        url = 'https://m.vk.com/id{0:s}?act=info'.format(self.page_id)
+        url = f'https://m.vk.com/id{self.page_id}?act=info'
         page = self.session.get(url, proxies=self.proxies).text.encode('utf-8')
         soup = BeautifulSoup(page, 'lxml')
         #tui = soup.find_all('div', class_="profile_info")
@@ -226,24 +225,23 @@ class person:
                 info.append(i.find('div', class_="Menu__itemCount").text)
 
         try:
-            results_ = json.load(open('data/info/user_{0:s}.json'.format(self.page_id), 'r'))
+            results_ = json.load(open(f'data/info/user_{self.page_id}.json', 'r'))
         except FileNotFoundError:
             results_ = dict()
             #data/info/user_23444989.json
 
         results_.update(zip(title, info))
 
-        with open('data/info/user_{0:s}.json'.format(self.page_id), 'w') as outfile:
+        with open(f'data/info/user_{self.page_id}.json', 'w') as outfile:
             json.dump(results_, outfile)
 
 
         #for line in tui:
-        #    open('data/info/user_{0:s}.vui'.format(self.page_id), 'a', encoding="utf8").write(str(line))
+        #    open(f'data/info/user_{self.page_id}.vui', 'a', encoding="utf8").write(str(line))
 
 
     def __str__(self):
-        return '{0:s}: id = {1:s}, name = "{2:s}", lastseen = "{3:s}"'.format(self.__class__.__name__, self.page_id,
-                                                                  self.name, self.lastseen)
+        return f'{self.__class__.__name__}: id = {self.page_id}, name = "{self.name}", lastseen = "{self.lastseen}"'
 
 
 # - - - - - - - - - M A I N - - - - - - - - - - - #
@@ -259,11 +257,10 @@ if not login or not password:
         password = getpass('Enter password: ')
 
 # LOGGING
-log("""{0}
-    {1:s} : New tracking session : {2:s}""".format(
-    '- '*46, time.strftime("%d-%m-%Y %H:%M:%S"), str(page_id)))
+log(f"""{'- '*46}
+    {time.strftime("%d-%m-%Y %H:%M:%S")} : New tracking session : {str(page_id)}""")
 
-log("Proxy settings: {0:s}".format(proxy) if proxy else "(No proxies)")
+log(f"Proxy settings: {proxy if proxy else '(No proxies)'}")
 
 # CREATING A TARGET
 p = []
@@ -282,7 +279,7 @@ db = database(tablename=time.strftime("T%d_%m_%Y"))  # CREATING NEW TABLE IN DAT
 # FIRST TRY
 for target in p:
     target.session = p[0].session
-    db.conn = sqlite3.connect('data/db/user_{0:s}.db'.format(target.page_id))
+    db.conn = sqlite3.connect(f'data/db/user_{target.page_id}.db')
     target.getpage()
     target.getname()
     target.getlastseen()
@@ -291,12 +288,12 @@ for target in p:
 
     # UI
     if target.lastseen == '2':
-        print('Something gose wrong with user id{0:s}...\n'.format(target.page_id),
+        print(f'Something goes wrong with user id{target.page_id}...\n',
               'Please, check the id correctness and restart script' if target.name == ''
               else 'Please, restart script and try to login')
         quit()
     else:
-        print('Tracking started successfully\nUser: {0}'.format(target.name))
+        print(f'Tracking started successfully\nUser: {target.name}')
 
 print('Status:')
 
@@ -308,21 +305,19 @@ while True:
         for target in p:
             target.getpage()
             target.getlastseen()
-            db.add(id=target.page_id.__str__(), hours=time.strftime("%H"), mins=time.strftime("%M"),
-                   state=target.lastseen, tabname=time.strftime("T%d_%m_%Y"))
+            db.add(id=target.page_id.__str__(),
+                   hours=time.strftime("%H"),
+                   mins=time.strftime("%M"),
+                   state=target.lastseen,
+                   tabname=time.strftime("T%d_%m_%Y"))
 
             # UI
-            print('{0}  :  {1} ({2})'.format(
-                time.strftime("%d-%m-%Y %H:%M:%S"),
-                'Online' if target.lastseen == '1' else 'Offline' if target.lastseen == '0' else 'ERROR',
-                target.name
-            ))
+            online_status = 'Online' if target.lastseen == '1' else 'Offline' if target.lastseen == '0' else 'ERROR'
+            current_time = time.strftime("%d-%m-%Y %H:%M:%S")
+            print(f"""{current_time}  :  {online_status} ({target.name})""")
 
             # LOGGING
-            log('{0}  :  {1}'.format(
-                time.strftime("%d-%m-%Y %H:%M:%S"),
-                target.__str__()
-            ))
+            log(f'{current_time}  :  {target.__str__()}')
 
         # TIME FIXING AND PAUSE
         etime -= time.time()

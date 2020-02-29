@@ -19,38 +19,38 @@ class person(statistic):
     about = {}
 
     def mk_statistic(self, date, path, alt):
-        return """
-        <p><details><summary>
-{0}
-            </summary><br/><img class = "stat" src = "data/pic/
-{1}
-            " alt = "
-{2}
-            " width=75% /><br/><br/><br/>Online activity percentage:
-{3} %
-            <br/><br/>Maximum session duration:
-{4} minutes
-            <br/><br/>Minimum session duration:
-{5} minutes
-<br><br><br></details>
-                  """.format(date, path, alt, self.oap, self.maxsd, self.minsd)
+        return f"""
+        <p>
+            <details>
+                <summary>{date}</summary><br>
+                <img class = "stat" src = "data/pic/{path}" alt = "{alt}" width=75%><br><br><br>
+                Online activity percentage: {self.oap} %<br><br>
+                Maximum session duration: {self.maxsd} minutes<br><br>
+                Minimum session duration: {self.minsd} minutes<br><br><br>
+            </details>
+        </p>
+"""
 
     def mk_hat(self, content):
-        return_ = """
-        <aside><img src = "data/pic/
-{0}
-        " alt = "
-{1}
-        " class="ProfilePic"/></aside><article><p><dir class="username">
-{2}
-</dir></article><br><article>
-""".format(self.pic, self.pic, content.get('Name'), )
+        return_ = f"""
+        <aside>
+            <img src = "data/pic/{self.pic}" alt = "{self.pic}" class="ProfilePic">
+        </aside>
+        
+        <article>
+            <p>
+                <dir class="username">{content.get('Name')}</dir>
+            </p>        
+        </article>
+        <br>
+"""
 
         for title in content:
             if title != 'Name':
-                return_ += """
-                <div class="Menu__itemTitle">{0}:   <a class="Menu__itemCount">{1}</a></div>
-                """.format(title, content[title])
+                return_ += f"""
+                <div class="Menu__itemTitle">
+                    {title}:   <a class="Menu__itemCount">{content[title]}</a>
+                </div>"""
 
         return_ += "</article>"
 
@@ -203,15 +203,15 @@ def mkhtml():
     for ids in idsdir:
         p = person()
         p.user_id = ids[5:-3]
-        p.pic = 'profpic_{0}.jpeg'.format(p.user_id)
-        p.profpic = 'data/pic/user_{0}'.format(p.user_id)
-        p.about = json.load(open('data/info/user_{0}.json'.format(p.user_id), 'r'))
+        p.pic = f'profpic_{p.user_id}.jpeg'
+        p.profpic = f'data/pic/user_{p.user_id}'
+        p.about = json.load(open(f'data/info/user_{p.user_id}.json', 'r'))
 
         stat = open('data/info/user_' + p.user_id + '.vus', 'r', encoding="utf8")
         # FIXIT
 
         # info = open('data/info/user_' + p.user_id + '.vui', 'r', encoding="utf8")
-        # info = json.load('data/info/user_{0}.json'.format(p.user_id))
+        # info = json.load(f'data/info/user_{p.user_id}.json')
 
         html = open('user_' + p.user_id + '.html', 'w', encoding="utf8")
         example = open('templates/defaultpage.html', 'r', encoding="utf8")
