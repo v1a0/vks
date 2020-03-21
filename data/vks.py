@@ -8,6 +8,7 @@ import time
 from getpass import getpass
 import re
 import json
+import converter
 
 # GET DATA FROM JSON
 config = json.load(open('config.json', 'r'))
@@ -17,6 +18,7 @@ password = config.get("password")
 proxy = config.get("proxy")
 st = config.get("sleep_time")
 install = config.get("install")
+auto_convert = bool(config.get("autoconvert"))
 del config
 
 
@@ -319,11 +321,13 @@ while True:
             # LOGGING
             log(f'{current_time}  :  {target.__str__()}')
 
+        if auto_convert: converter.convert(log=False)
+
         # TIME FIXING AND PAUSE
         etime -= time.time()
         time.sleep(st + etime if abs(etime) < st else st)
 
-
     except NameError as _error:
         log(error=_error.__str__())
         print("!ERROR\n", _error.__str__())
+        converter.convert()

@@ -1,257 +1,310 @@
-from PIL import Image, ImageDraw, ImageFont
-import sqlite3
-import datetime
-import json
-from os import walk, makedirs
 
 
-class statistic:
-    oap = 0  # OAP - Online Activity Percentage
-    maxsd = 0  # MSD - Maximum Session Duration
-    minsd = 9223372036854775806  # MIN session duration
-    date = ''
+def convert(log=True):
+
+    from PIL import Image, ImageDraw, ImageFont
+    import sqlite3
+    import datetime
+    import json
+    from os import walk, makedirs
+    import time
 
 
-class person(statistic):
-    user_id = ''
-    pic = ''
-    profpic = 'data/pic/'
-    about = {}
+    class statistic:
+        activity_percent = 0
+        max_session_time = 0
+        min_session_time = 9223372036854775806
+        date = ''
 
-    def mk_statistic(self, date, path, alt):
-        return f"""
-            <details>
-                <summary>{date}</summary>
-                <img class = "stat" src = "data/pic/{path}" alt = "{alt}" width=75%>
-                <div class="dayinfo">
-                Online activity percentage: {self.oap} %
+    class person(statistic):
+        user_id = ''
+        pic = ''
+        profpic = 'data/pic/'
+        about = {}
+
+        def mk_statistic(self, date, path, alt):
+            return f"""
+                <details>
+                    <summary>{date}</summary>
+                    <img class = "stat" src = "data/pic/{path}" alt = "{alt}" width=75%>
+                    <div class="dayinfo">
+                    Online activity percentage: {self.activity_percent} %
+                    </div>
+                    
+                    <div class="dayinfo">
+                    Maximum session duration: {self.max_session_time} minutes
+                    </div>
+                                    
+                    <div class="dayinfo">
+                    Minimum session duration: {self.min_session_time} minutes
+                    </div>
+                </details>
+    """
+
+        def mk_hat(self, content):
+            return_ = f"""
+                <div class="userinfo">
+                    <div class="username">{content.get('Name')}</div>
+    """
+
+            for title in content:
+                if title != 'Name':
+                    return_ += f"""
+                    <div class="Menu__itemTitle">
+                        {title}:   <a class="Menu__itemCount">{content[title]}</a>
+                    </div>"""
+
+
+
+            return_ += f"""
                 </div>
-                
-                <div class="dayinfo">
-                Maximum session duration: {self.maxsd} minutes
+            
+                <div class="profpic">
+                    <img src = "data/pic/{self.pic}" alt = "{self.pic}" class="profpic">
                 </div>
-                                
-                <div class="dayinfo">
-                Minimum session duration: {self.minsd} minutes
-                </div>
-            </details>
-"""
+            """
 
-    def mk_hat(self, content):
-        return_ = f"""
-            <div class="userinfo">
-                <div class="username">{content.get('Name')}</div>
-"""
-
-        for title in content:
-            if title != 'Name':
-                return_ += f"""
-                <div class="Menu__itemTitle">
-                    {title}:   <a class="Menu__itemCount">{content[title]}</a>
-                </div>"""
+            return return_
 
 
+    def mkspic():
+        class data:
+            hour = 0
+            minute = 0
+            stat = 0
 
-        return_ += f"""
-            </div>
-        
-            <div class="profpic">
-                <img src = "data/pic/{self.pic}" alt = "{self.pic}" class="profpic">
-            </div>
-        """
+            def __init__(self, args):
+                self.hour, self.minute, self.stat = args[0], args[1], args[2]
 
-        return return_
+        if log: print("\n1. Visualising data to graphics...\n")
 
+        db_list = []
+        pic_list = []
+        exist_list = []
 
-def mkspic():
-    class data:
-        h = 0
-        m = 0
-        stat = 0
+        for (dirpath, dirnames, filenames) in walk('data/db'):
+            db_list.extend(filenames)
+            break
 
-        def __init__(self, args):
-            self.h, self.m, self.stat = args[0], args[1], args[2]
+        # SEARCHING ALREADY EXISTING PICTURES EXCEPT TODAY'S  #
+        for (dirpath, dirnames, filenames) in walk('data/pic'):
+            pic_list.extend(filenames)
+            break
 
-    print("\nVisualising data to graphics...\n")
+        for i in pic_list:
+            if not (i[1:11] in exist_list) and (i[1:11] != time.strftime("%d_%m_%Y")): exist_list.append(i[1:11])
 
-    dir = []
-    for (dirpath, dirnames, filenames) in walk('data/db'):
-        dir.extend(filenames)
-        break
+        # ################################################### #
 
-    for dbfile in dir:
-        try:
-            conn = sqlite3.connect('data/db/' + dbfile)
-            db = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
-            for tab in db:
-                print(tab[0], ' DONE')
-                if tab[0][0] == 'T':
-                    items = []
-                    try:
-                        cursor = conn.execute('SELECT HOURS, MINUTES, STATE FROM ' + tab[0])
-                    except sqlite3.OperationalError:
-                        cursor = ''
+        for db_file_name in db_list:
+            try:
+                conn = sqlite3.connect('data/db/' + db_file_name)
+                db = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                for tab in db:
+                    if tab[0][0] == 'T' and not (tab[0][1:11] in exist_list):
+                        items = []
+                        try:
+                            cursor = conn.execute('SELECT HOURS, MINUTES, STATE FROM ' + tab[0])
+                        except sqlite3.OperationalError:
+                            cursor = ''
 
-                    for item in cursor:
-                        items.append(data(item))
+                        for item in cursor:
+                            items.append(data(item))
 
-                    makedirs('data/pic', exist_ok=True)
-                    pic = Image.open('data/pic/defaultpic.png')
-                    draw = ImageDraw.Draw(pic)
+                        makedirs('data/pic', exist_ok=True)
+                        pic = Image.open('data/pic/defaultpic.png')
+                        draw = ImageDraw.Draw(pic)
 
-                    font = ImageFont.truetype("fonts/OpenSans-Regular.ttf", 90)
-                    date_obj = datetime.datetime.strptime(tab[0], "T%d_%m_%Y")
-                    text = date_obj.strftime("%d %b %Y")
-                    draw.text((540, 10), text, (0, 0, 0), font=font)
-                    draw.text((535, 5), text, (255, 255, 255), font=font)
+                        font = ImageFont.truetype("fonts/OpenSans-Regular.ttf", 90)
+                        date_obj = datetime.datetime.strptime(tab[0], "T%d_%m_%Y")
+                        text = date_obj.strftime("%d %b %Y")
+                        draw.text((540, 10), text, (0, 0, 0), font=font)
+                        draw.text((535, 5), text, (255, 255, 255), font=font)
 
-                    sx = 4
-                    sy = 0
-                    for i in range(len(items)):
-                        x, y = (73, 401) if items[i].h < 6 else (73, 699) if items[i].h < 12 \
-                            else (73, 1053) if items[i].h < 18 else (73, 1351)
+                        sx = 4
+                        sy = 0
+                        for i in range(len(items)):
+                            x, y = (73, 401) if items[i].hour < 6 else (73, 699) if items[i].hour < 12 \
+                                else (73, 1053) if items[i].hour < 18 else (73, 1351)
 
-                        x += (items[i].h % 6) * 60 * 4 + (items[i].m * 4)
+                            x += (items[i].hour % 6) * 60 * 4 + (items[i].minute * 4)
 
-                        if items[i].stat == 1:
-                            sy = 8 if items[i - 1].stat == 2 else sy + 1 if sy == 176 else sy + 8 if sy < 176 else sy
+                            if items[i].stat == 1:
+                                sy = 8 if items[i - 1].stat == 2 else sy + 1 if sy == 176 else sy + 8 if sy < 176 else sy
 
-                            draw.rectangle((x + 1, y, x + sx, y - sy), fill=(0 + sy, 255 - (sy // 5), 0))
+                                draw.rectangle((x + 1, y, x + sx, y - sy), fill=(0 + sy, 255 - (sy // 5), 0))
 
-                        elif items[i].stat == 0:
-                            sy = 8
-                            draw.rectangle((x + 1, y, x + sx, y - 2), fill=(0, 0, 120))
+                            elif items[i].stat == 0:
+                                sy = 8
+                                draw.rectangle((x + 1, y, x + sx, y - 2), fill=(0, 0, 120))
 
-                        elif items[i].stat == 2:
-                            sy = 8
-                            draw.rectangle((x + 1, y, x + sx, y - 177), fill=(255, 50, 0))
+                            elif items[i].stat == 2:
+                                sy = 8
+                                draw.rectangle((x + 1, y, x + sx, y - 177), fill=(255, 50, 0))
 
-                    pic.save('data/pic/P' + tab[0][1:] + 'U' + dbfile[5:-3] + '.png')
+                        pic_name = 'data/pic/P' + tab[0][1:] + 'U' + db_file_name[5:-3] + '.png'
+                        pic.save(pic_name)
 
-        except sqlite3.DatabaseError:
-            pass
+                        if log: print(f'{pic_name} is CREATED')
 
-    # 74x402
-    # 74x700
-    # 74x1054
-    # 74x1352
+            except sqlite3.DatabaseError:
+                pass
+
+        # 74x402
+        # 74x700
+        # 74x1054
+        # 74x1352
 
 
-def mkstat():
-    print('\nAnalysing data...\n')
-    dir = []
-    for (dirpath, dirnames, filenames) in walk('data/db'):
-        dir.extend(filenames)
-        break
+    def mkstat():
+        if log: print('\n2. Analysing data...\n')
+        db_list = []
+        exist_list = []
 
-    for dbfile in dir:
-        print(dbfile)
-        try:
-            conn = sqlite3.connect('data/db/' + dbfile)
-            stat = [statistic for _ in range(60 * 24)]
-            j = 0
-            open('data/info/' + dbfile[:-3] + '.vus', 'w', encoding="utf8").write('')
-            db = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
-            for tab in db:
-                if tab[0][0] == 'T':
-                    print(tab[0], ' DONE')
-                    items = []
-                    try:
-                        cursor = conn.execute('SELECT STATE FROM ' + tab[0])
-                    except sqlite3.OperationalError:
-                        cursor = ''
+        for (dir_path, dir_names, file_names) in walk('data/db'):
+            db_list.extend(file_names)
+            break
 
-                    for item in cursor:
-                        items.append(item)
+        # SEARCHING ALREADY EXISTING PICTURES EXCEPT TODAY'S  #
+        for (dir_path, dir_names, file_names) in walk('data/info'):
+            stat_list = []
+            stat_list.extend(file_names)
+            for file_name in stat_list:
+                if '_stat' in file_name[:-5]:
+                    exist_list.append(file_name[5:-10])
+            break
 
-                    stat[j].date = str(tab[0][1:])
-                    temp = 0
-                    all = 0
-                    stat[j].maxsd = 0
-                    stat[j].minsd = 9223372036854775806
-                    for i in range(len(items)):
+        for db_file_name in db_list:
 
-                        if items[i][0] != 0 and items[i][0] != 2:
-                            temp += 1
-                            all += 1
+            try:
+                with open(f'data/info/{db_file_name[:-3]}_stat.json', 'r') as file:
+                    final_stat = json.load(file)
+            except FileNotFoundError:
+                final_stat = {}
+
+            try:
+                conn = sqlite3.connect('data/db/' + db_file_name)
+                db = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                users_stat_list = [statistic for _ in range(60 * 24)]
+                N = 0
+
+                for tab in db:
+                    if tab[0][0] == 'T' and ((final_stat.get(tab[0][1:]) is None) or (tab[0][1:] == time.strftime("%d_%m_%Y"))):
+                        if log: print(f'{db_file_name[:-3]}: {tab[0][1:]} is DONE')
+
+                        day_data = []
+                        try:
+                            cursor = conn.execute('SELECT STATE FROM ' + tab[0])
+                        except sqlite3.OperationalError:
+                            cursor = ''
+
+                        for item in cursor:
+                            day_data.append(item[0])
+
+                        users_stat_list[N].date = str(tab[0][1:])
+                        current_sesion_time = 0
+                        all_time = 0
+                        users_stat_list[N].max_session_time = 0
+                        users_stat_list[N].min_session_time = 9223372036854775806
+
+                        # SEARCHING MAX AND MIN VALUES #
+                        for state in day_data:
+                            if state != 0 and state != 2:
+                                current_sesion_time += 1
+                                all_time += 1
+                            else:
+                                if users_stat_list[N].max_session_time < current_sesion_time:
+                                    users_stat_list[N].max_session_time = current_sesion_time
+                                if users_stat_list[N].min_session_time > current_sesion_time != 0:
+                                    users_stat_list[N].min_session_time = current_sesion_time
+                                current_sesion_time = 0
+                        # ############################# #
+
+                        users_stat_list[N].activity_percent = all_time / len(day_data) if len(day_data) != 0 else 0
+
+                        if users_stat_list[N].min_session_time == 9223372036854775806:
+                            stat_result = ['00.00', '00', '00']
                         else:
-                            if stat[j].maxsd < temp: stat[j].maxsd = temp
-                            if stat[j].minsd > temp and temp != 0: stat[j].minsd = temp
-                            temp = 0
+                            stat_result = [
+                                        str(users_stat_list[N].activity_percent * 100)[:5],
+                                        str(users_stat_list[N].max_session_time),
+                                        str(users_stat_list[N].min_session_time)
+                                        ]
 
-                    stat[j].oap = all / len(items) if len(items) != 0 else 0
+                        final_stat[users_stat_list[N].date] = stat_result
+                        N += 1
 
-                    if stat[j].minsd == 9223372036854775806:
-                        result = ' 00.00 00 00\n'
-                    else:
-                        result = ' ' + str(stat[j].oap * 100)[:5] + ' ' + str(stat[j].maxsd) + ' ' + str(
-                            stat[j].minsd) + '\n'
+            except sqlite3.DatabaseError:
+                pass
 
-                    open('data/info/' + dbfile[:-3] + '.vus', 'a', encoding="utf8").write(stat[j].date + result)
-                    j += 1
-
-        except sqlite3.DatabaseError:
-            pass
+            with open(f'data/info/{db_file_name[:-3]}_stat.json', 'w') as outfile:
+                json.dump(final_stat, outfile)
 
 
-def mkhtml():
-    print('\nCombining all parts to html...\n')
-    idsdir = []
-    for (dirpath, dirnames, filenames) in walk('data/db'):
-        idsdir.extend(filenames)
-        break
 
-    picdir = []
-    for (dirpath, dirnames, filenames) in walk('data/pic'):
-        picdir.extend(filenames)
-        break
+    def mkhtml():
 
-    for ids in idsdir:
-        p = person()
-        p.user_id = ids[5:-3]
-        p.pic = f'profpic_{p.user_id}.jpeg'
-        p.profpic = f'data/pic/user_{p.user_id}'
-        p.about = json.load(open(f'data/info/user_{p.user_id}.json', 'r'))
+        if log: print('\n3. Combining all parts to html...\n')
+        id_list = []
+        for (dirpath, dirnames, filenames) in walk('data/db'):
+            id_list.extend(filenames)
+            break
 
-        stat = open('data/info/user_' + p.user_id + '.vus', 'r', encoding="utf8")
-        # FIXIT
+        pic_list = []
+        for (dirpath, dirnames, filenames) in walk('data/pic'):
+            pic_list.extend(filenames)
+            break
 
-        # info = open('data/info/user_' + p.user_id + '.vui', 'r', encoding="utf8")
-        # info = json.load(f'data/info/user_{p.user_id}.json')
+        for _id in id_list:
+            p = person()
+            p.user_id = _id[5:-3]
+            p.pic = f'profpic_{p.user_id}.jpeg'
+            p.profpic = f'data/pic/user_{p.user_id}'
+            p.about = json.load(open(f'data/info/user_{p.user_id}.json', 'r'))
 
-        html = open('user_' + p.user_id + '.html', 'w', encoding="utf8")
-        example = open('templates/defaultpage.html', 'r', encoding="utf8")
-        hat = p.mk_hat(p.about)
+            with open(f'data/info/user_{p.user_id}_stat.json', 'r') as file:
+                stat_data = json.load(file)
 
-        for line in example.readlines():
-            if '<!-- %USERDATA% -->\n' in line:
-                html.write(hat)
-            elif '<!-- %STATDATA% -->\n' in line:
-                for stat_line in stat.readlines():
-                    element = stat_line.replace('_', ' ').split()
-                    day = element[0]
-                    mon = element[1]
-                    year = element[2]
-                    p.oap = element[3]
-                    p.maxsd = element[4]
-                    p.minsd = element[5]
+            html = open('user_' + p.user_id + '.html', 'w', encoding="utf8")
+            example = open('templates/defaultpage.html', 'r', encoding="utf8")
+            hat = p.mk_hat(p.about)
 
-                    date = day + '/' + mon + '/' + year
-                    path = 'P' + day + '_' + mon + '_' + year + 'U' + p.user_id + '.png'
-                    alt = date + '_user_' + p.user_id
+            for line in example.readlines():
+                if '<!-- %USERDATA% -->\n' in line:
+                    html.write(hat)
+                elif '<!-- %STATDATA% -->\n' in line:
+                    for (stat_line, data) in {a: b for a,b in sorted(stat_data.items(),
+                                                                     reverse=True,
+                                                                     key=lambda item: int(item[0][0:2]) +
+                                                                                      int(item[0][3:5])*31 +
+                                                                                      int(item[0][6:10])*666)}.items():
+                        element = stat_line.replace('_', ' ').split()
+                        day = element[0]
+                        mon = element[1]
+                        year = element[2]
+                        p.activity_percent = data[0]
+                        p.max_session_time = data[1]
+                        p.min_session_time = data[2]
 
-                    daystat = p.mk_statistic(date=date, path=path, alt=alt)
+                        date = day + '/' + mon + '/' + year
+                        path = 'P' + day + '_' + mon + '_' + year + 'U' + p.user_id + '.png'
+                        alt = date + '_user_' + p.user_id
 
-                    html.write(daystat)
-            else:
-                html.write(line)
-        stat.close()
-        html.close()
-        example.close()
-        print('user_' + p.user_id + '.html', ' DONE')
+                        daystat = p.mk_statistic(date=date, path=path, alt=alt)
+
+                        html.write(daystat)
+                else:
+                    html.write(line)
+
+            html.close()
+            example.close()
+            if log: print('user_' + p.user_id + '.html', 'is DONE')
 
 
-mkspic()
-mkstat()
-mkhtml()
-print('\nAll data successfully converted to HTML')
+    mkspic()
+    mkstat()
+    mkhtml()
+    if log: print('\nAll data successfully converted to HTML')
+
+if __name__ == '__main__':
+    convert()
