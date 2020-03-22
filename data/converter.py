@@ -256,50 +256,53 @@ def convert(log=True):
             break
 
         for _id in id_list:
-            p = person()
-            p.user_id = _id[5:-3]
-            p.pic = f'profpic_{p.user_id}.jpeg'
-            p.profpic = f'data/pic/user_{p.user_id}'
-            p.about = json.load(open(f'data/info/user_{p.user_id}.json', 'r'))
+            try:
+                p = person()
+                p.user_id = _id[5:-3]
+                p.pic = f'profpic_{p.user_id}.jpeg'
+                p.profpic = f'data/pic/user_{p.user_id}'
+                p.about = json.load(open(f'data/info/user_{p.user_id}.json', 'r'))
 
-            with open(f'data/info/user_{p.user_id}_stat.json', 'r') as file:
-                stat_data = json.load(file)
+                with open(f'data/info/user_{p.user_id}_stat.json', 'r') as file:
+                    stat_data = json.load(file)
 
-            html = open('user_' + p.user_id + '.html', 'w', encoding="utf8")
-            example = open('templates/defaultpage.html', 'r', encoding="utf8")
-            hat = p.mk_hat(p.about)
+                html = open('user_' + p.user_id + '.html', 'w', encoding="utf8")
+                example = open('templates/defaultpage.html', 'r', encoding="utf8")
+                hat = p.mk_hat(p.about)
 
-            for line in example.readlines():
-                if '<!-- %USERDATA% -->\n' in line:
-                    html.write(hat)
-                elif '<!-- %STATDATA% -->\n' in line:
-                    for (stat_line, data) in {a: b for a,b in sorted(stat_data.items(),
-                                                                     reverse=True,
-                                                                     key=lambda item: int(item[0][0:2]) +
-                                                                                      int(item[0][3:5])*31 +
-                                                                                      int(item[0][6:10])*666)}.items():
-                        element = stat_line.replace('_', ' ').split()
-                        day = element[0]
-                        mon = element[1]
-                        year = element[2]
-                        p.activity_percent = data[0]
-                        p.max_session_time = data[1]
-                        p.min_session_time = data[2]
+                for line in example.readlines():
+                    if '<!-- %USERDATA% -->\n' in line:
+                        html.write(hat)
+                    elif '<!-- %STATDATA% -->\n' in line:
+                        for (stat_line, data) in {a: b for a,b in sorted(stat_data.items(),
+                                                                         reverse=True,
+                                                                         key=lambda item: int(item[0][0:2]) +
+                                                                                          int(item[0][3:5])*31 +
+                                                                                          int(item[0][6:10])*666)}.items():
+                            element = stat_line.replace('_', ' ').split()
+                            day = element[0]
+                            mon = element[1]
+                            year = element[2]
+                            p.activity_percent = data[0]
+                            p.max_session_time = data[1]
+                            p.min_session_time = data[2]
 
-                        date = day + '/' + mon + '/' + year
-                        path = 'P' + day + '_' + mon + '_' + year + 'U' + p.user_id + '.png'
-                        alt = date + '_user_' + p.user_id
+                            date = day + '/' + mon + '/' + year
+                            path = 'P' + day + '_' + mon + '_' + year + 'U' + p.user_id + '.png'
+                            alt = date + '_user_' + p.user_id
 
-                        daystat = p.mk_statistic(date=date, path=path, alt=alt)
+                            daystat = p.mk_statistic(date=date, path=path, alt=alt)
 
-                        html.write(daystat)
-                else:
-                    html.write(line)
+                            html.write(daystat)
+                    else:
+                        html.write(line)
 
-            html.close()
-            example.close()
-            if log: print('user_' + p.user_id + '.html', 'is DONE')
-
+                html.close()
+                example.close()
+                if log: print('user_' + p.user_id + '.html', 'is DONE')
+            
+            except FileNotFoundError:
+                pass
 
     mkspic()
     mkstat()

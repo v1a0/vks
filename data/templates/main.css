@@ -191,3 +191,25 @@ img.stat {
 details {
         margin:  2px 0 2px 0; 
 }
+
+
+.paswd {
+    position: relative;
+    text-align: center;
+    background-color: #16181a;
+    padding: 20px 10px 5px 10px;
+    border-radius: 4px;
+    top: -10px;
+    width: 100%;
+    left: -10px;
+    font-size: 20px;
+}
+
+
+.paswd_in {
+    background: linear-gradient(-180deg,#34d058,#1ecc46 90%);;
+    border: 0px;
+    font-size: 20px;
+    border-radius: 5px;
+    width: 500px;
+}
