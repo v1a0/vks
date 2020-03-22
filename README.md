@@ -131,12 +131,10 @@ To fix it authorise as 'real' user or friend of target.
 ##### 2.3.2 Any other errors 
 
 Read information about error into data\log\log_vks.txt
-Try to fix it by yourself or [send bug report](https://github.com/V1A0/VkScrapper/issues/new)
+Try to fix it by yourself or [send bug report](https://github.com/V1A0/VkScrapper/issues/new/choose)
 
 ### 3. Visualizing statistic
-After you collect some statistic data, you can stop script. Just close console or press Ctrl + C some times.<br>
-Now you need to analyze and/or visualize this information.
-Open main path and run script ``` converter.py ```:
+If html files was not created automatically into main dir of script. Open main path and run script ``` converter.py ```:
 ```bash
 py converter.py
 ```
@@ -163,7 +161,7 @@ user_10000451.html  DONE
 
 All data successfully converted to HTML
 ```
-After that you can find some .html files into main script's directory. Format of file name it 'user_%id%.html'.<br>
+After that you can find some html files into main script's directory. Format of file name it 'user_%id%.html'.<br>
 Open it by any browser and enjoy.
 
 <b> Example of html file (screenshot): </b>
