@@ -1,12 +1,10 @@
-# VkScrapper v 1.1.7 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) [![License:MIT](https://img.shields.io/badge/license-MIT-green)](https://img.shields.io/github/license/V1A0/VkScrapper)
+# VkScrapper v 1.1.8 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) [![License:MIT](https://img.shields.io/badge/license-MIT-green)](https://img.shields.io/github/license/V1A0/VkScrapper)
  
 Program for monitor your own online activity on [vk.com]
 
-## Update 1.1.7 - What's new?
-1. Quick conversion (picture and statistic is not creating again if it's already exist).
-2. Auto (realtime) converting (ON by default)
-3. Vars renaming
-4. Code refactoring
+## Update 1.1.8 - What's new?
+- Absolutely NEW frontend
+- Full collection of profile information
 
 
 ## 1. Libraries Installation
@@ -178,17 +176,24 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 
 ## OLD UPDs
-### Update 1.1.6 - What's new?
+
+### Update 1.1.7
+1. Quick conversion (picture and statistic is not creating again if it's already exist).
+2. Auto (realtime) converting (ON by default)
+3. Vars renaming
+4. Code refactoring
+
+### Update 1.1.6
 1. HTML front end remastering
 2. Code refactoring
 
-### Update 1.1.5 - What's new?
+### Update 1.1.5
 1. Converter upd (bugfix)
 2. Better algorithm of finding userinfo
 3. HTML and CSS templates upd
 4. config.json
 
-### Update 1.1.4 - What's new?
+### Update 1.1.4
 1. Support multiple targets
 2. Better error logging
 3. Not support inline arguments anymore
