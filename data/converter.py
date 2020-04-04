@@ -26,7 +26,9 @@ def convert(log=True):
             return f"""
                 <details>
                     <summary>{date}</summary>
+                    <div class="stat_pic">
                     <img class = "stat" src = "data/pic/{path}" alt = "{alt}" width=75%>
+                    </div>
                     <div class="dayinfo">
                     Online activity percentage: {self.activity_percent} %
                     </div>
@@ -38,33 +40,12 @@ def convert(log=True):
                     <div class="dayinfo">
                     Minimum session duration: {self.min_session_time} minutes
                     </div>
+
                 </details>
     """
 
         def mk_hat(self, content):
-            return_ = f"""
-                <div class="userinfo">
-                    <div class="username">{content.get('Name')}</div>
-    """
-
-            for title in content:
-                if title != 'Name':
-                    return_ += f"""
-                    <div class="Menu__itemTitle">
-                        {title}:   <a class="Menu__itemCount">{content[title]}</a>
-                    </div>"""
-
-
-
-            return_ += f"""
-                </div>
-            
-                <div class="profpic">
-                    <img src = "data/pic/{self.pic}" alt = "{self.pic}" class="profpic">
-                </div>
-            """
-
-            return return_
+            return content.get('page_block')
 
 
     def mkspic():
@@ -118,8 +99,15 @@ def convert(log=True):
                         font = ImageFont.truetype("fonts/OpenSans-Regular.ttf", 90)
                         date_obj = datetime.datetime.strptime(tab[0], "T%d_%m_%Y")
                         text = date_obj.strftime("%d %b %Y")
-                        draw.text((540, 10), text, (0, 0, 0), font=font)
-                        draw.text((535, 5), text, (255, 255, 255), font=font)
+                        #draw.text((540, 10), text, (0, 0, 0), font=font)
+                        draw.text((535, 5), text, (0, 0, 0), font=font)
+                        color = {
+                                'online':   [58,     85,     240],
+                                'offline':  [64,    130,     240],
+                                'error':    [231,    151,     107],
+                                'not':      ['R',  'G',   'B']
+                                 }
+
 
                         sx = 4
                         sy = 0
@@ -132,15 +120,21 @@ def convert(log=True):
                             if items[i].stat == 1:
                                 sy = 8 if items[i - 1].stat == 2 else sy + 1 if sy == 176 else sy + 8 if sy < 176 else sy
 
-                                draw.rectangle((x + 1, y, x + sx, y - sy), fill=(0 + sy, 255 - (sy // 5), 0))
+                                draw.rectangle((x + 1, y, x + sx, y - sy), fill=(color['online'][0] + (sy // 3),
+                                                                                 color['online'][1] + (sy // 5),
+                                                                                 color['online'][2]))
 
                             elif items[i].stat == 0:
                                 sy = 8
-                                draw.rectangle((x + 1, y, x + sx, y - 2), fill=(0, 0, 120))
+                                draw.rectangle((x + 1, y, x + sx, y - 2), fill=(color['offline'][0],
+                                                                                color['offline'][1],
+                                                                                color['offline'][2]))
 
                             elif items[i].stat == 2:
                                 sy = 8
-                                draw.rectangle((x + 1, y, x + sx, y - 177), fill=(255, 50, 0))
+                                draw.rectangle((x + 1, y, x + sx, y - 177), fill=(color['error'][0],
+                                                                                  color['error'][1],
+                                                                                  color['error'][2]))
 
                         pic_name = 'data/pic/P' + tab[0][1:] + 'U' + db_file_name[5:-3] + '.png'
                         pic.save(pic_name)
@@ -300,7 +294,7 @@ def convert(log=True):
                 html.close()
                 example.close()
                 if log: print('user_' + p.user_id + '.html', 'is DONE')
-            
+
             except FileNotFoundError:
                 pass
 

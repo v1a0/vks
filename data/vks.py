@@ -21,7 +21,6 @@ install = config.get("install")
 auto_convert = bool(config.get("autoconvert"))
 del config
 
-
 # MODULES INSTALLING
 if install == '1':
     os.system('pip install sqlite3')
@@ -199,48 +198,21 @@ class person:
     # GET PROFILE INFORMATION
     # tui - temporary user info
     def getinfo(self):
-        open(f'data/info/user_{self.page_id}.vui', 'w', encoding="utf8").write(self.name + '\n')
-
         url = f'https://m.vk.com/id{self.page_id}?act=info'
         page = self.session.get(url, proxies=self.proxies).text.encode('utf-8')
         soup = BeautifulSoup(page, 'lxml')
-        #tui = soup.find_all('div', class_="profile_info")
 
-        title = ['Name']
-        info = [self.name]
-        menu = soup.find('div', class_="profile_info_cont").find_all('a')
-        eng_ = {"Friends": "Friends",
-                      "Друзья": "Friends",
-                      "Photos": "Photos",
-                      "Фотографии": "Photos",
-                      "Videos": "Videos",
-                      "Видео": "Videos",
-                      "Music": "Music",
-                      "Музыка": "Music",
-                      "Аудиозаписи": "Music",
-                      "Following": "Following",
-                      "Подписки": "Following"
-                      }
-
-        for i in menu:
-                title.append(eng_.get(i.find('div', class_="Menu__itemTitle").text))
-                info.append(i.find('div', class_="Menu__itemCount").text)
+        page_block = soup.find(class_="PageBlock PageBlock_overflow").__str__()
 
         try:
-            results_ = json.load(open(f'data/info/user_{self.page_id}.json', 'r'))
+            results_ = json.load(open(f'data/info/user_{self.page_id}.json', 'r', encoding='utf8'))
         except FileNotFoundError:
             results_ = dict()
-            #data/info/user_23444989.json
 
-        results_.update(zip(title, info))
+        results_.update({'page_block':page_block})
 
-        with open(f'data/info/user_{self.page_id}.json', 'w') as outfile:
+        with open(f'data/info/user_{self.page_id}.json', 'w', encoding="utf8") as outfile:
             json.dump(results_, outfile)
-
-
-        #for line in tui:
-        #    open(f'data/info/user_{self.page_id}.vui', 'a', encoding="utf8").write(str(line))
-
 
     def __str__(self):
         return f'{self.__class__.__name__}: id = {self.page_id}, name = "{self.name}", lastseen = "{self.lastseen}"'
@@ -259,7 +231,7 @@ if not login or not password:
         password = getpass('Enter password: ')
 
 # LOGGING
-log(f"""{'- '*46}
+log(f"""{'- ' * 46}
     {time.strftime("%d-%m-%Y %H:%M:%S")} : New tracking session : {str(page_id)}""")
 
 log(f"Proxy settings: {proxy if proxy else '(No proxies)'}")
@@ -269,12 +241,10 @@ p = []
 for t_id in page_id:
     p.append(person(page_id=t_id, proxies=proxy))  # SET ID
 
-
 # LOGIN REQUEST + CREATING SESSION
 if password:
     p[0].loginsession(login, password)
     del password  # REMOVING PASSWORD FROM MEMORY
-
 
 db = database(tablename=time.strftime("T%d_%m_%Y"))  # CREATING NEW TABLE IN DATABASE
 
