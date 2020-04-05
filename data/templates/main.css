@@ -10,18 +10,21 @@ html {
 
 .main_grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    position: absolute;
     width: 95%;
-   
+    margin: 0 auto;
+    justify-content: center;
+
 }
 
 
 .PageBlock_overflow {
+    grid-column: 1;
+    grid-row: 1;
+    
     background-color: #ffffff;
     width: 400px;
     padding: 20px;
-    grid-column: 1;
-    grid-row: 1;
 }
 
 .PageBlock {
@@ -251,15 +254,15 @@ dt {
 
 
 .content {
-    position: absolute;
     
-    left: 650px;
-    top: 6px;
-    height: auto;
+    margin-left: 20px;
+    
+    grid-column: 2;
+    grid-row: 1/3;
+    
     background-color: #ffffff;
     padding: 20px;
-    margin-right: 102px;
-    margin-left: 20px;
+
     min-width: 600px;
     max-width: 700px;
     
