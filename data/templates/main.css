@@ -11,6 +11,7 @@ html {
 .main_grid {
     display: grid;
     position: absolute;
+    top: 70px;
     width: 95%;
     margin: 0 auto;
     justify-content: center;
@@ -328,4 +329,25 @@ details[open] summary {
 
 .cr:hover {
     color: #ed0000;
+}
+
+.paswd {
+    margin: 0 auto;
+    
+    
+    padding: 15px 20px 3px 20px;
+    background-color: #fff;
+    margin: 0 auto;
+    border-radius: 5px;
+
+    position: absolute;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, 0%);
+    box-shadow: 10px 10px 40px rgba(126, 126, 126, 0.1);
+    
+}
+
+input.paswd_in {
+    min-width: 300px;
 }
