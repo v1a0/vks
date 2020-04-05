@@ -45,7 +45,7 @@ def convert(log=True):
     """
 
         def mk_hat(self, content):
-            return content.get('page_block')[:-6] # I have no idea why this goddamn page have excess </div>
+            return content.get('page_block')[:-6].replace('?ava=1', '') # I have no idea why this goddamn page have excess </div>
 
 
 
