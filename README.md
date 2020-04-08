@@ -129,7 +129,7 @@ To fix it authorise as 'real' user or friend of target.
 ##### 2.3.2 Any other errors 
 
 Read information about error into data\log\log_vks.txt
-Try to fix it by yourself or [send bug report](https://github.com/V1A0/VkScrapper/issues/new/choose)
+Try to fix it by yourself or [send bug report](https://github.com/V1A0/VKS/issues/new/choose)
 
 ### 3. Visualizing statistic
 If html files was not created automatically into main dir of script. Open main path and run script ``` converter.py ```:
@@ -164,7 +164,7 @@ Open it by any browser and enjoy.
 
 <b> Example of html file (screenshot): </b>
 
- <img src="https://raw.githubusercontent.com/V1A0/VkScrapper/master/.pic/example.png"
+ <img src="https://raw.githubusercontent.com/V1A0/VKS/master/.pic/example.png"
      alt="example-screenshot"
      style="float: left;" />
 
