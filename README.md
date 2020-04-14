@@ -1,10 +1,32 @@
+
+<div style="position: relative; float: left; width: 100%;">
+
+
+  <img src=".pic/head.svg" alt="logo-vks"
+  style="position: relative; float: left; width: 200px; margin-right: 40px; margin-bottom: 90px; margin-top: 13px;">
 # VKS v 1.1.8 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) [![License:MIT](https://img.shields.io/badge/license-MIT-green)](https://img.shields.io/github/license/V1A0/VkScrapper)
- 
-Program for monitor your own online activity on [vk.com]
+Program for monitor <b>your own</b> online activity on [vk.com]
+
+<div style="padding-left: 240px; font-size: 18px; line-height: 25px">
+
+### Features:
+- [x] 📈 Recording online activity
+- [x] 📊 Live time visualizing data as HTML (ready for web)
+- [x] 📑 Scrapping profile info
+- [x] 🎯 Multiple targets support
+- [x] 🌐 Proxy support
+
+> Coming soon
+> - [ ] 🕵🏼 Secure mode
+> - [ ] 🎱 Predicting activity
+</div>
 
 ## Update 1.1.8 - What's new?
-- Absolutely NEW frontend
-- Full collection of profile information
+ - Absolutely NEW frontend
+ - Full collection of profile information
+
+</div>
+
 
 
 ## 1. Libraries Installation
@@ -19,7 +41,7 @@ pip install Pillow
 pip install requests
 ```
 OR add parameter `"1"` for key `install` into file `config.json`
-```
+```json
 ...
 "install" : "1",
 ```
@@ -77,7 +99,7 @@ Example:
 py vks.py
 ```
 
-Script use login data only once, to create a session. After that password is erasing from program's memory. Also you can delete it from 
+Script use login data only once, to create a session. After that password is erasing from program's memory. Also you can delete it from
 `config.json` or enter it just use UI (p 2.1 - First way - UI). For this just leave empty "password" parameter. <br/>
 If tracking session started successfully you'll get message in your terminal like this:
 ```bash
@@ -124,9 +146,9 @@ Status:
 05-01-1984 13:40:42  :  ERROR
 ```
 Name displaying, but activity status is 'ERROR'.<br/>
-To fix it authorise as 'real' user or friend of target. 
+To fix it authorise as 'real' user or friend of target.
 
-##### 2.3.2 Any other errors 
+##### 2.3.2 Any other errors
 
 Read information about error into data\log\log_vks.txt
 Try to fix it by yourself or [send bug report](https://github.com/V1A0/VKS/issues/new/choose)
@@ -204,9 +226,3 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 [vk.com]: (https://vk.com/)
 [pip]:(https://pip.pypa.io/en/stable/)
-
-
-
-
-
-
