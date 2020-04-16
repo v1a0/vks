@@ -94,10 +94,10 @@ def convert(log=True):
                             items.append(data(item))
 
                         makedirs('data/pic', exist_ok=True)
-                        pic = Image.open('data/pic/defaultpic.png')
+                        pic = Image.open('templates/defaultpic.png')
                         draw = ImageDraw.Draw(pic)
 
-                        font = ImageFont.truetype("fonts/OpenSans-Regular.ttf", 90)
+                        font = ImageFont.truetype("templates/fonts/OpenSans-Regular.ttf", 90)
                         date_obj = datetime.datetime.strptime(tab[0], "T%d_%m_%Y")
                         text = date_obj.strftime("%d %b %Y")
                         #draw.text((540, 10), text, (0, 0, 0), font=font)

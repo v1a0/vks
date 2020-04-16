@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-VKS v 1.1.5
+VKS v 1.1.9
 """
 
 import os
 import time
 from getpass import getpass
-import re
 import json
 import converter
+from rand_header import *
+from getproxy import *
 
 # GET DATA FROM JSON
 config = json.load(open('config.json', 'r'))
@@ -18,30 +19,38 @@ password = config.get("password")
 proxy = config.get("proxy")
 st = config.get("sleep_time")
 install = config.get("install")
+rand_proxy = bool(config.get("rand_proxy"))
+rand_header = bool(config.get("rand_header"))
+debug = bool(config.get("debug"))
 auto_convert = bool(config.get("autoconvert"))
 del config
 
 # MODULES INSTALLING
 if install == '1':
-    os.system('pip install sqlite3')
-    os.system('pip install argparse')
-    os.system('pip install bs4')
-    os.system('pip install lxml')
-    os.system('pip install requests')
-    os.system('pip install Pillow')
+    if os.name == 'nt':
+        os.system('''
+                    pip install sqlite3
+                    pip install lxml
+                    pip install requests
+                    pip install Pillow
+                    ''')
+    else:
+        print("read install.py")
+        quit()
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 import sqlite3
 import requests
-from bs4 import BeautifulSoup
+from lxml import etree
+import lxml.html as lx
 
 # CREATING DIRECTORIES
 os.makedirs('log', exist_ok=True)
+os.makedirs('data', exist_ok=True)
 os.makedirs('data/html/', exist_ok=True)
 os.makedirs('data/db/', exist_ok=True)
 os.makedirs('data/pic/', exist_ok=True)
 os.makedirs('data/info/', exist_ok=True)
-
 
 # LOGGING FUNCTION
 def log(data='', dir='log/log_vks.txt', error=''):
@@ -92,14 +101,20 @@ class person:
     name = ''
     lastseen = ''
     proxies = {}
+    page = ''
+    page_info = ''
+    links = {"pp_img": "",
+             "f0_img": "",
+             "f1_img": "",
+             "f2_img": ""
+             }
 
     # PARAMETERS EDITING
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
     # AUTHORISATION
-    def loginsession(self, login='', password='', useragent='Mozilla/5.0 (Macintosh; Intel Mac OS X'
-                                                            ' 10.12; rv:50.0) Gecko/20100101 Firefox/50.0'):
+    def loginsession(self, login='', password=''):
 
         log("Login session: login=" + login)
         payload = {
@@ -109,110 +124,143 @@ class person:
             'role': 'al_frame',
             '_origin': 'https://vk.com'
         }
-        headers = {
-            "Referer": "https://m.vk.com/login?role=fast&to=&s=1&m=1&email=" + login,
-            'User-Agent': useragent
-        }
+        headers = randheader.get(upd={'Referer': 'https://m.vk.com/login?role=fast&to=&s=1&m=1&email=' + login})\
+            if rand_header else {
+            'Referer': 'https://m.vk.com/login?role=fast&to=&s=1&m=1&email=' + login,
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:50.0) Gecko/20100101 Firefox/50.0'}
 
         login_get = self.session.get('https://m.vk.com/login', headers=headers,
                                      proxies=self.proxies)  # GET REQUEST OF LOGIN PAGE
-        soup = BeautifulSoup(login_get.content, 'lxml')  # SOUP
-        login_form = soup.find('form')['action']  # FINDING LOGIN FORM
+
+        self.page = lx.fromstring(login_get.content)
+        login_form = self.page.xpath('//form/@action')[0]
+
         self.session.post(login_form, data=payload, headers=headers,
                           proxies=self.proxies)  # POST REQUEST + SESSION SAVING
 
     # GET TARGETED PAGE
     def getpage(self):
-        url = 'https://vk.com/id' + self.page_id
+        url = f'https://vk.com/id{self.page_id}'
+        self.page = lx.fromstring(self.session.get(url, proxies=self.proxies).content)
 
         # GET REQUEST + CACHING PAGE INTO HTML FILE
-        try:
-            with open(f'data/html/{self.page_id}.html', 'wb') as page_cache:
-                page_cache.write(self.session.get(url, proxies=self.proxies).text.encode('utf-8'))
-
-        except requests.exceptions.ConnectionError as _error:
-            # CREATING
-            with open(f'data/html/{self.page_id}.html', 'w', encoding="utf8") as page_cache:
-                page_cache.write(
-                    '<meta charset="utf-8"><html><body><h1>CONNECTION ERROR</h1> error 1: Can’t connect to server : '
-                    f'requests.exceptions.ConnectionError : <a href=\"{url}\">URL</a></body></html>')
-            log(data="Get request of targeted page failed [person.getpage()]", error=_error.__str__())
-
-    # GET 'LAST SEEN' INFO FORM CACHED HTML PAGE
-    def getlastseen(self):
-        page_cache = open(f'data/html/{self.page_id}.html', 'r', encoding="utf8")
-        soup = BeautifulSoup(page_cache, 'lxml')
-
-        # SEARCHING 'LAST SEEN' INFORMATION (I know it looks disgusting but I'll change it later)
-        # tls - temporary last seen note
-        try:
-            tls = soup.find('span', class_='pp_last_activity_offline_text').next_element
-        except AttributeError:
+        # XX
+        if debug:
             try:
-                tls = soup.find('span', class_='pp_last_activity_text').next_element
-            except AttributeError:
-                try:
-                    tls = soup.find('div', class_='profile_online_lv').next_element
-                except AttributeError:
-                    tls = 'ERROR'
+                with open(f'data/html/{self.page_id}.html', 'wb') as page_cache:
+                    page_cache.write(self.session.get(url, proxies=self.proxies).text.encode('utf-8'))
 
-        self.lastseen = '1' if tls == 'Online' else '2' if tls == 'ERROR' else '0'
-        page_cache.close()
+            except requests.exceptions.ConnectionError as _error:
+                log(data="Get request of targeted page failed [person.getpage()]", error=_error.__str__())
+
+    # SCRAPPING 'LAST SEEN' INFORMATION
+    def getlastseen(self):
+        try:
+            lastseen_str = \
+                self.page.xpath('//div[@class="pp_last_activity"]/'
+                                'span[@class="pp_last_activity_offline_text"]')[0].text_content()
+        except IndexError:
+            try:
+                lastseen_str = self.page.xpath('//div[@class="pp_last_activity"]/'
+                                               'span[@class="pp_last_activity_text"]')[0].text_content()
+            except IndexError:
+                try:
+                    lastseen_str = self.page.xpath('//div[@class="pp_last_activity"]/'
+                                                   'span[@class="profile_online_lv"]')[0].text_content()
+                except IndexError:
+                    lastseen_str = 'ERROR'
+        self.lastseen = '1' if lastseen_str == 'Online' else '2' if lastseen_str == 'ERROR' else '0'
 
     # GET NAME OF TARGETED USER FORM CACHED HTML PAGE
     def getname(self):
-        page_cache = open(f'data/html/{self.page_id}.html', 'r', encoding="utf8")
-        soup = BeautifulSoup(page_cache, 'lxml')
 
-        # SOUP SEARCHING
         try:
-            self.name = soup.find('title').next_element
-        except AttributeError as _error:
+            self.name = self.page.xpath('//div[@class="pp_cont"]/h2[@class="op_header"]')[0].text_content()
+        except IndexError as _error:
             self.name = 'error'
             log(error=_error.__str__())
 
         # LOGGING
-        log("Get name request: " + self.name)
-        page_cache.close()
+        log(f"Name ({self.page_id}): {self.name}")
 
     # GET PROFILE PICTURE
     # tpl - temporary picture link
-    def getprofpic(self):
-        page_cache = open(f'data/html/{self.page_id}.html', 'r', encoding="utf8")
-        soup = BeautifulSoup(page_cache, 'lxml')
+    def getprofpics(self):
         try:
-            tpl = soup.find('div', class_="owner_panel profile_panel")
-            link = re.search(r"https://\S{1,}ava=1", str(tpl)).group()
-            req = requests.get(link, stream=True, proxies=self.proxies)
+            link2pic = self.page.xpath('//div[@class="owner_panel profile_panel"]//a//'
+                                       'img[@class="pp_img"]/@src')[0]
+            req = requests.get(link2pic, stream=True, proxies=self.proxies)
+            img_path = f'data/pic/profpic_{self.page_id}.jpeg'
+
             if req.status_code == 200:
-                log(f"{link} --> data/pic/profpic_{self.page_id}.jpeg")
-                with open(f'data/pic/profpic_{self.page_id}.jpeg', 'wb') as file:
+                with open(img_path, 'wb') as file:
                     for chunk in req:
                         file.write(chunk)
+                        self.links.update({"pp_img": link2pic})
+
+                log(f"{link2pic} --> {img_path}")
+
+            links2f_pics = self.page.xpath('//div[@class="Friends__mutualItem"]//'
+                                           'img[@class="Friends__mutualItemImg"]/@src')
+
+            for link in links2f_pics:
+                i = links2f_pics.index(link)
+                try:
+                    req = requests.get(link, stream=True, proxies=self.proxies)
+                except requests.exceptions.MissingSchema:
+                    req = requests.get(f"https://vk.com{link}", stream=True, proxies=self.proxies)
+
+                img_path = f'data/pic/friendpic_{self.page_id}_{i}.jpeg'
+
+                if req.status_code == 200:
+                    with open(img_path, 'wb') as file:
+                        for chunk in req:
+                            file.write(chunk)
+                            self.links.update({f"f{i}_img": link})
+
+                    log(f"{link} --> {img_path}")
 
         except AttributeError as _error:
             print(f"{_error} {self.page_id} : page close or does not exist (can't get profile picture)")
             log(data=f"{self.page_id} : page close or does not exist (can't get profile picture)",
                 error=_error.__str__())
 
-    # GET PROFILE INFORMATION
-    # tui - temporary user info
     def getinfo(self):
+        # CONVERTING
         url = f'https://m.vk.com/id{self.page_id}?act=info'
-        page = self.session.get(url, proxies=self.proxies).text.encode('utf-8')
-        soup = BeautifulSoup(page, 'lxml')
+        info_content = self.session.get(url, proxies=self.proxies).content
+        self.page_info = lx.fromstring(info_content)
+        self.page_info = self.page_info.xpath('//div[@class="PageBlock PageBlock_overflow"]')[0]
+        self.page_info = etree.tostring(self.page_info, method='html', encoding="UTF-8").decode('utf-8')
 
-        page_block = soup.find(class_="PageBlock PageBlock_overflow").__str__()
+        # REPLACING img links
+        links_replace = {"pp_img": f"data/pic/profpic_{self.page_id}.jpeg",
+                         "f0_img": f"data/pic/friendpic_{self.page_id}_1.jpeg",
+                         "f1_img": f"data/pic/friendpic_{self.page_id}_2.jpeg",
+                         "f2_img": f"data/pic/friendpic_{self.page_id}_3.jpeg"
+                         }
+        for (name, link) in self.links.items():
+            if link:
+                self.page_info = self.page_info.replace(link, links_replace.get(name))
+        # ------------------ #
 
         try:
             results_ = json.load(open(f'data/info/user_{self.page_id}.json', 'r', encoding='utf8'))
         except FileNotFoundError:
             results_ = dict()
+        except json.decoder.JSONDecodeError:
+            results_ = dict()
 
-        results_.update({'page_block':page_block})
-
+        results_.update({'page_block': self.page_info})
         with open(f'data/info/user_{self.page_id}.json', 'w', encoding="utf8") as outfile:
             json.dump(results_, outfile)
+
+    def get_all(self):
+        self.getpage()
+        self.getname()
+        self.getlastseen()
+        self.getprofpics()
+        self.getinfo()
 
     def __str__(self):
         return f'{self.__class__.__name__}: id = {self.page_id}, name = "{self.name}", lastseen = "{self.lastseen}"'
@@ -220,6 +268,13 @@ class person:
 
 # - - - - - - - - - M A I N - - - - - - - - - - - #
 os.system('cls' if os.name == 'nt' else 'clear')  # Clear the console
+print("""VKS v1.1.9 | vk.com opensource stalkerware
+Running... 
+""")
+
+if rand_proxy and not proxy:
+    while not proxy:
+        proxy = r_proxy().get()
 
 # USER INTERFACE (UI)
 while not page_id[0]:
@@ -237,26 +292,22 @@ log(f"""{'- ' * 46}
 log(f"Proxy settings: {proxy if proxy else '(No proxies)'}")
 
 # CREATING A TARGET
-p = []
+targets_list = []
 for t_id in page_id:
-    p.append(person(page_id=t_id, proxies=proxy))  # SET ID
+    targets_list.append(person(page_id=t_id, proxies=proxy))  # SET ID
 
 # LOGIN REQUEST + CREATING SESSION
 if password:
-    p[0].loginsession(login, password)
+    targets_list[0].loginsession(login, password)
     del password  # REMOVING PASSWORD FROM MEMORY
 
 db = database(tablename=time.strftime("T%d_%m_%Y"))  # CREATING NEW TABLE IN DATABASE
 
 # FIRST TRY
-for target in p:
-    target.session = p[0].session
+for target in targets_list:
+    target.session = targets_list[0].session
     db.conn = sqlite3.connect(f'data/db/user_{target.page_id}.db')
-    target.getpage()
-    target.getname()
-    target.getlastseen()
-    target.getprofpic()
-    target.getinfo()
+    target.get_all()
 
     # UI
     if target.lastseen == '2':
@@ -274,7 +325,7 @@ while True:
     try:
         etime = time.time()  # ERROR TIME
 
-        for target in p:
+        for target in targets_list:
             target.getpage()
             target.getlastseen()
             db.add(id=target.page_id.__str__(),

@@ -4,8 +4,8 @@
 		<img width="200" src=".pic/vks-200.png" alt="Awesome Node.js" style="position: relative; float: left; width: 200px; margin-right: 40px; margin-bottom: 90px; margin-top: 13px;">
 	</div>
 	<br>
-	
-# VKS v 1.1.8 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) [![License:MIT](https://img.shields.io/badge/license-MIT-green)](https://img.shields.io/github/license/V1A0/VkScrapper)
+
+# VKS v 1.1.9 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) [![License:MIT](https://img.shields.io/badge/license-MIT-green)](https://img.shields.io/github/license/V1A0/VkScrapper)
 Program for monitor <b>your own</b> online activity on [vk.com]
 </div>
 
@@ -21,15 +21,23 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 - [x] 📑 Scrapping profile info
 - [x] 🎯 Multiple targets support
 - [x] 🌐 Proxy support
+- [x] 🕵🏼 Secure mode
+	- [x] 🔀 Random proxy
+	- [x] 🎲 Random headers
 
 > Coming soon
-> - [ ] 🕵🏼 Secure mode
 > - [ ] 🎱 Predicting activity
+> - [ ] ❌ Get new proxy if previous failed
+> - [ ] 👪 Multiple accounts support
+
 </div>
 
-## Update 1.1.8 - What's new?
- - Absolutely NEW frontend
- - Full collection of profile information
+## Update 1.1.9 - What's new?
+ - Secure UPD
+ - Random proxy module
+ - Random headers module
+ - Speed up work!
+ - For scrapes use only lxml
 
 </div>
 
@@ -41,7 +49,6 @@ Use the package manager [pip] to install necessary for script modules.
 
 ```bash
 pip install sqlite3
-pip install bs4
 pip install lxml
 pip install Pillow
 pip install requests
@@ -75,6 +82,9 @@ You don't must to login, but user page may be hidden from anonymous visits by pr
 Script use login data only once, to create a web-session. After that password is erasing and will never be appear in memory.<br/>
 If tracking session started successfully you'll get message like that in your terminal:
 ```bash
+VKS v1.1.9 | vk.com opensource stalkerware
+Running...
+
 Tracking is started successfully
 User: Guy Montag
 Status:
@@ -91,12 +101,16 @@ Example:
 
 ```json
 {
-  "id" : ["10000451", "19668908"],
-  "login" : "79998887766",
-  "password" : "mypaswd1234",
-  "proxy" : {"https": "127.0.0.1:8080"},
-  "sleep_time" : 60,
-  "install" : ""
+	"id" : ["10000451", "19668908"],    # Targets id
+	"login" : "79998887766",			# Login data
+	"password" : "mypaswd1234",		 # Login data
+	"proxy" : {},					   # Custom proxy settings
+	"sleep_time" : 60,				  # Don't change it!
+	"install" : "",					 # Install requires
+	"autoconvert": "True",  			# Auto converting data to HTML
+	"debug" : "",					   # Debug mod
+	"rand_proxy" : "True",			  # Get randome proxy from sslproxies.org (Secure setting)
+	"rand_header" : "True",			 # Set random header for login request (Secure setting)
 }
 ```
 
@@ -109,6 +123,9 @@ Script use login data only once, to create a session. After that password is era
 `config.json` or enter it just use UI (p 2.1 - First way - UI). For this just leave empty "password" parameter. <br/>
 If tracking session started successfully you'll get message in your terminal like this:
 ```bash
+VKS v1.1.9 | vk.com opensource stalkerware
+Running...
+
 Tracking is started successfully
 User: Guy Montag
 Tracking is started successfully
@@ -127,6 +144,9 @@ Don't close the terminal until you didn't get enough data to analise.
 ---
 If you have only one target your terminal will be looks like this
 ```bush
+VKS v1.1.9 | vk.com opensource stalkerware
+Running...
+
 Tracking is started successfully
 User: Guy Montag
 Status:
@@ -135,26 +155,66 @@ Status:
 05-01-1984 13:39:42  :  Online (Guy Montag)
 05-01-1984 13:40:42  :  Online (Guy Montag)
 ```
+#### 2.3 Secure settings
+
+Into `config.json` you can find some kind of options like that
+
+```json
+{
+	"proxy" : {},					   # Custom proxy settings
+	"rand_proxy" : "True",			  # Get randome proxy from sslproxies.org
+	"rand_header" : "True",			 # Set random header for login request
+}
+```
+
+##### 2.3.1 Random proxy
+VKS have inline module to get free proxy from sslproxies.org: `getproxy.py`
+It's based on ["free-proxy" by jundymek](https://github.com/jundymek/free-proxy). This script just scrapes proxies from https://www.sslproxies.org/ and checks it.
+
+To enable this setting, set 🟢
+```
+"rand_proxy" : "True",
+```
+To disable 🔴
+```
+"rand_proxy" : "",
+```
+
+##### 2.3.1 Random header
+VKS have inline module to set random header for authorize request:
+List of User-Agents based on [useragent-data.json](https://github.com/skratchdot/random-useragent/blob/master/useragent-data.json) from ["random-useragent" by skratchdot](https://github.com/skratchdot/random-useragent).
+
+To enable this setting, set 🟢
+```
+"rand_header" : "True",
+```
+To disable 🔴
+```
+"rand_header" : "",
+```
 
 
-#### 2.3 Errors and how to fix ⚠
+#### 2.4 Errors and how to fix ⚠
 
-##### 2.3.1 Status error
+##### 2.4.1 Status error
 
 If user hiding his page from anonymous visits, you'll see messages like this:
 ```bash
+VKS v1.1.9 | vk.com opensource stalkerware
+Running...
+
 Tracking is started successfully
 User: Guy Montag
 Status:
-05-01-1984 13:37:42  :  ERROR
-05-01-1984 13:38:42  :  ERROR
-05-01-1984 13:39:42  :  ERROR
-05-01-1984 13:40:42  :  ERROR
+05-01-1984 13:37:42  :  ERROR (Guy Montag)
+05-01-1984 13:38:42  :  ERROR (Guy Montag)
+05-01-1984 13:39:42  :  ERROR (Guy Montag)
+05-01-1984 13:40:42  :  ERROR (Guy Montag)
 ```
 Name displaying, but activity status is 'ERROR'.<br/>
 To fix it authorise as 'real' user or friend of target.
 
-##### 2.3.2 Any other errors
+##### 2.4.2 Any other errors
 
 Read information about error into data\log\log_vks.txt
 Try to fix it by yourself or [send bug report](https://github.com/V1A0/VKS/issues/new/choose)
@@ -204,6 +264,10 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 
 ## OLD UPDs
+
+## Update 1.1.8 - What's new?
+ - Absolutely NEW frontend
+ - Full collection of profile information
 
 ### Update 1.1.7
 1. Quick conversion (picture and statistic is not creating again if it's already exist).
