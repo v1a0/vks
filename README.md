@@ -105,16 +105,16 @@ Example:
 
 ```json
 {
-	"id" : ["10000451", "19668908"],    # Targets id
-	"login" : "79998887766",			# Login data
-	"password" : "mypaswd1234",		 # Login data
-	"proxy" : {},					   # Custom proxy settings
-	"sleep_time" : 60,				  # Don't change it!
-	"install" : "",					 # Install requires
-	"autoconvert": "True",  			# Auto converting data to HTML
-	"debug" : "",					   # Debug mod
-	"rand_proxy" : "True",			  # Get randome proxy from sslproxies.org (Secure setting)
-	"rand_header" : "True",			 # Set random header for login request (Secure setting)
+	"id" : ["10000451", "19668908"],    	# Targets id
+	"login" : "79998887766",		# Login data
+	"password" : "mypaswd1234",		# Login data
+	"proxy" : {},				# Custom proxy settings
+	"sleep_time" : 60,			# Don't change it!
+	"install" : "",				# Install requires
+	"autoconvert": "True",  		# Auto converting data to HTML
+	"debug" : "",				# Debug mod
+	"rand_proxy" : "True",			# Get randome proxy from sslproxies.org (Secure setting)
+	"rand_header" : "True",			# Set random header for login request (Secure setting)
 }
 ```
 
@@ -165,21 +165,23 @@ Into `config.json` you can find some kind of options like that
 
 ```json
 {
-	"proxy" : {},					   # Custom proxy settings
-	"rand_proxy" : "True",			  # Get randome proxy from sslproxies.org
-	"rand_header" : "True",			 # Set random header for login request
+	"proxy" : {},				# Custom proxy settings
+	"rand_proxy" : "True",			# Get randome proxy from sslproxies.org
+	"rand_header" : "True",			# Set random header for login request
 }
 ```
 
 ##### 2.3.1 Random proxy
 VKS have inline module to get free proxy from sslproxies.org: `getproxy.py`
-It's based on ["free-proxy" by jundymek](https://github.com/jundymek/free-proxy). This script just scrapes proxies from https://www.sslproxies.org/ and checks it.
+It's based on ["free-proxy" by jundymek](https://github.com/jundymek/free-proxy). This script just scrapes proxies from https://www.sslproxies.org/ and checks it. 
 
-To enable this setting, set 🟢
+> ⚠️ This function is not stable at this moment, be careful, connection might fail at any time! ⚠️
+
+🟢 To enable this setting, set
 ```
 "rand_proxy" : "True",
 ```
-To disable 🔴
+🔴 To disable
 ```
 "rand_proxy" : "",
 ```
@@ -188,11 +190,11 @@ To disable 🔴
 VKS have inline module to set random header for authorize request:
 List of User-Agents based on [useragent-data.json](https://github.com/skratchdot/random-useragent/blob/master/useragent-data.json) from ["random-useragent" by skratchdot](https://github.com/skratchdot/random-useragent).
 
-To enable this setting, set 🟢
+🟢 To enable this setting, set
 ```
 "rand_header" : "True",
 ```
-To disable 🔴
+🔴 To disable
 ```
 "rand_header" : "",
 ```
