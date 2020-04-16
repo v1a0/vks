@@ -1,7 +1,7 @@
 
 <div align="center">
 	<div>
-		<img width="200" src=".pic/vks-200.png" alt="Awesome Node.js" style="position: relative; float: left; width: 200px; margin-right: 40px; margin-bottom: 90px; margin-top: 13px;">
+		<img width="200" src=".pic/vks.svg" alt="vks-logo">
 	</div>
 	<br>
 
