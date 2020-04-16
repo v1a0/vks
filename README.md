@@ -1,7 +1,7 @@
 
 <div align="center">
 	<div>
-		<img width="200" src=".pic/vks.svg" alt="vks-logo">
+		<img width="200" src=".pic/vks-200.png" alt="Awesome Node.js" style="position: relative; float: left; width: 200px; margin-right: 40px; margin-bottom: 90px; margin-top: 13px;">
 	</div>
 	<br>
 
@@ -33,12 +33,16 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 </div>
 
 ## Update 1.1.9 - What's new?
- - Secure UPD
+ - Security UPD
  - Random proxy module
  - Random headers module
- - Speed up work!
- - For scrapes use only lxml
+ - Speed up x3!
+ - For scrapes now use only lxml
+ - Some files moving
+ - Less third-party modules
 
+> Thanks [@jundymek](https://github.com/jundymek) for [free-proxy](https://github.com/jundymek/free-proxy) and [@skratchdot](https://github.com/skratchdot) for [random-useragent](https://github.com/skratchdot/random-useragent).
+ 
 </div>
 
 
