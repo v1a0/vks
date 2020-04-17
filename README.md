@@ -42,7 +42,7 @@ Program for monitor <b>your own</b> online activity on [vk.com]
  - Less third-party modules
 
 > Thanks [@jundymek](https://github.com/jundymek) for [free-proxy](https://github.com/jundymek/free-proxy) and [@skratchdot](https://github.com/skratchdot) for [random-useragent](https://github.com/skratchdot/random-useragent).
- 
+
 </div>
 
 
@@ -82,7 +82,7 @@ Are you sure you want to continue without authorisation?
 Enter login: +79998887766
 Enter password: [not displayed]
 ```
-You don't must to login, but user page may be hidden from anonymous visits by privacy settings.<br/>
+You don't have to login, but user page may be hidden from anonymous visits by privacy settings.<br/>
 Script use login data only once, to create a web-session. After that password is erasing and will never be appear in memory.<br/>
 If tracking session started successfully you'll get message like that in your terminal:
 ```bash
@@ -173,7 +173,7 @@ Into `config.json` you can find some kind of options like that
 
 ##### 2.3.1 Random proxy
 VKS have inline module to get free proxy from sslproxies.org: `getproxy.py`
-It's based on ["free-proxy" by jundymek](https://github.com/jundymek/free-proxy). This script just scrapes proxies from https://www.sslproxies.org/ and checks it. 
+It's based on ["free-proxy" by jundymek](https://github.com/jundymek/free-proxy). This script just scrapes proxies from https://www.sslproxies.org/ and checks it.
 
 > ⚠️ This function is not stable at this moment, be careful, connection might fail at any time! ⚠️
 
