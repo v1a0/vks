@@ -22,8 +22,8 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 - [x] 🎯 Multiple targets support
 - [x] 🌐 Proxy support
 - [x] 🕵🏼 Secure mode
-	- [x] 🔀 Random proxy
-	- [x] 🎲 Random headers
+	- [x] 🔀 Random proxy (sslproxies.org)
+	- [x] 🎲 Random headers (773 headers)
 
 > Coming soon
 > - [ ] 🎱 Predicting activity
