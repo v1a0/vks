@@ -47,16 +47,23 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 
 
 
-## 1. Libraries Installation
+## 1. Install requirements
+### 1.1 First way
+```shell script
+pip3 install -r requirements.txt
+```
 
+### 1.2 Second way
 Use the package manager [pip] to install necessary for script modules.
 
-```bash
+```shell script
 pip install sqlite3
 pip install lxml
 pip install Pillow
 pip install requests
 ```
+
+### 1.3 Third way
 OR add parameter `"1"` for key `install` into file `config.json`
 ```json
 ...
@@ -66,17 +73,17 @@ OR add parameter `"1"` for key `install` into file `config.json`
 
 
 ## 2. How to use
-#### 2.1. First way - UI
+#### 2.1. First way (simple) - UI
 For run use python 3.7+:
-```bash
+```shell script
 py vks.py
 ```
 After that, enter id of your page on vk.com:
-```bash
+```shell script
 Enter user id: 10000451
 ```
 Login (optional):
-```bash
+```shell script
 Are you sure you want to continue without authorisation?
 (y/n) : n
 Enter login: +79998887766
@@ -85,7 +92,7 @@ Enter password: [not displayed]
 You don't have to login, but user page may be hidden from anonymous visits by privacy settings.<br/>
 Script use login data only once, to create a web-session. After that password is erasing and will never be appear in memory.<br/>
 If tracking session started successfully you'll get message like that in your terminal:
-```bash
+```shell script
 VKS v1.1.9 | vk.com opensource stalkerware
 Running...
 
@@ -119,14 +126,14 @@ Example:
 ```
 
 ##### 2.2.2. After this save file and run the program use python:
-```bash
+```shell script
 py vks.py
 ```
 
 Script use login data only once, to create a session. After that password is erasing from program's memory. Also you can delete it from
 `config.json` or enter it just use UI (p 2.1 - First way - UI). For this just leave empty "password" parameter. <br/>
 If tracking session started successfully you'll get message in your terminal like this:
-```bash
+```shell script
 VKS v1.1.9 | vk.com opensource stalkerware
 Running...
 
@@ -147,7 +154,7 @@ Don't close the terminal until you didn't get enough data to analise.
 
 ---
 If you have only one target your terminal will be looks like this
-```bush
+```shell script
 VKS v1.1.9 | vk.com opensource stalkerware
 Running...
 
@@ -178,11 +185,11 @@ It's based on ["free-proxy" by jundymek](https://github.com/jundymek/free-proxy)
 > ⚠️ This function is not stable at this moment, be careful, connection might fail at any time! ⚠️
 
 🟢 To enable this setting, set
-```
+```json
 "rand_proxy" : "True",
 ```
 🔴 To disable
-```
+```json
 "rand_proxy" : "",
 ```
 
@@ -191,11 +198,11 @@ VKS have inline module to set random header for authorize request:
 List of User-Agents based on [useragent-data.json](https://github.com/skratchdot/random-useragent/blob/master/useragent-data.json) from ["random-useragent" by skratchdot](https://github.com/skratchdot/random-useragent).
 
 🟢 To enable this setting, set
-```
+```json
 "rand_header" : "True",
 ```
 🔴 To disable
-```
+```json
 "rand_header" : "",
 ```
 
@@ -205,7 +212,7 @@ List of User-Agents based on [useragent-data.json](https://github.com/skratchdot
 ##### 2.4.1 Status error
 
 If user hiding his page from anonymous visits, you'll see messages like this:
-```bash
+```shell script
 VKS v1.1.9 | vk.com opensource stalkerware
 Running...
 
@@ -227,11 +234,11 @@ Try to fix it by yourself or [send bug report](https://github.com/V1A0/VKS/issue
 
 ### 3. Visualizing statistic
 If html files was not created automatically into main dir of script. Open main path and run script ``` converter.py ```:
-```bash
+```shell script
 py converter.py
 ```
 If process successfully started you'll se messages like this:
-```bash
+```shell script
 Visualising data to graphics...
 
 T01_12_1984  DONE
