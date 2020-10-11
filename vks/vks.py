@@ -3,8 +3,6 @@ import vk_api_lite as api
 import sqlite_requests as db
 import time
 import datetime
-from loguru import logger
-
 
 
 @logger.catch
@@ -76,14 +74,10 @@ def main():
     for user_data in users:
         user_data_parser(user_data, data_time)
 
-    logger.info('Scrapping loop finished, waiting (around) 60 sec for next...')
+    logger.info(f'Scrapping loop finished, waiting (around) {REQ_FREQUENCY} sec for next...')
 
 
 if __name__ == '__main__':
-
-    logger.add("vks.log",
-               level="DEBUG", rotation="10Mb", compression='zip'
-               )
 
     logger.info(f"""Logging starting...
                 TARGETS: {TARGETS}""")

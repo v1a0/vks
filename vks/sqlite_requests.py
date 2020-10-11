@@ -1,5 +1,5 @@
 import sqlite3
-from loguru import logger
+from settings import logger
 
 
 @logger.catch
@@ -27,7 +27,7 @@ def insert_and_update_user_data(uid, time, first_name, last_name, is_closed, onl
     :param sex: int
     :param photo: str
     :param mobile: int
-    :return:
+    :return: None
     """
 
     insert_req = f"""

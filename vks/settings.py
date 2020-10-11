@@ -10,21 +10,24 @@ TARGETS = [
 ]
 
 
-""" 
-            ADVANCED SETTINGS [NOT AVAILABLE NOW]
+
+"""
+                      ADVANCED SETTINGS
 (proxy, random proxy mode, debug mode, requests frequency, other)
 """
 
-PROXY = [
-    None
-]
-
-RAND_PROXY = False
-
-DEBUG = True
+PROXY = {
+    "http": "",
+    "https": "",
+    "ftp": ""
+}
 
 REQ_FREQUENCY = 60
 
+LOG_FILE_NAME = "vks.log"
+LOG_MODE = "DEBUG"
+MAX_LOG_FILE_SIZE = "10Mb"
+COMPRESSION = "zip"
 
 GREETING_ART = """
                  #%%%%%%%%%%%
@@ -49,6 +52,12 @@ GREETING_ART = """
 =====================================================================================================                         
 """
 
+"""Set log settings
+loguru.loger.add(*args, **kwargs)
+"""
+logger.add(LOG_FILE_NAME, level=LOG_MODE, rotation=MAX_LOG_FILE_SIZE,
+           compression=COMPRESSION
+           )
 
 
 """Converting targets list to string
@@ -59,3 +68,4 @@ for target in TARGETS:
     temp_ += ',' + str(target)
 
 TARGETS = temp_[1:]
+

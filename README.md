@@ -14,33 +14,41 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 ### Features:
 - [x] 📈 Recording online activity
 - [x] 🎯 Multiple targets support
+- [x] 🌐 Proxy support
 
 ### Coming soon
 > - [ ] 📊 Live time visualizing data
-> - [ ] 🌐 Proxy support
-> - [ ] 🕵🏼 Secure mode
-> - [ ] 🔀 Random proxy (sslproxies.org)
-> - [ ] 🎲 Random headers (773 headers)
 > - [ ] 📑 Scrapping profile info
-> - [ ] ❌ Get new proxy if previous failed
 > - [ ] 👪 Multiple tokens support
 > - [ ] 🎱 Predicting activity
+> - [x] ~~🔀 Random proxy (sslproxies.org)~~ (403 Forbidden)
+
 
 
 # How to run
 
 First of all, set your settings in file `settings.py`:
-1. API_TOKEN - Your VK API token
+1. API_TOKEN = Your VK API token
 2. TARGETS = list of targets ids
+
+Optional
+1. PROXY = Custom proxy settings
 
 <details><summary>Example sets</summary>
 
-```python
+```pythons
 API_TOKEN = '000fuck0vk000i8oppkq22so2c7binpyysm5lpwxl3uliibir7kcr2ir8g0rgbu7lv4mo0000use0tlgrm000'
 
 TARGETS = [
     '123456789', '987654321', '121201'
 ]
+
+# Optional
+PROXY = {
+    "http": "http://123.45.6.78:4321",
+    "https": "https://123.45.6.78:4321",
+    "ftp": ""
+}
 ```
 </details>
 

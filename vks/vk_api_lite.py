@@ -1,6 +1,5 @@
 import requests as req
-from settings import *
-from loguru import logger
+from settings import PROXY, API_TOKEN, logger
 
 
 @logger.catch
@@ -36,7 +35,8 @@ def get_user_as_json(ids, token, data):
                f'access_token={token}&' \
                f'v=5.124'
 
-    result = req.get(request_).json()
+    result = req.get(request_, proxies=PROXY).json()
+
     return result
 
 
