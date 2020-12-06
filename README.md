@@ -4,7 +4,7 @@
 	</div>
 <br>
 
-# VKS v 0.2 ![Python:3.7](https://img.shields.io/badge/Python-3.7-yellow) [![stability-unstable](https://img.shields.io/badge/stability-unstable-yellow.svg)](https://github.com/emersion/stability-badges#unstable) [![License:MIT](https://img.shields.io/badge/license-MIT-green)](https://img.shields.io/github/license/V1A0/VkScrapper)
+# VKS v 0.2.2 ![Python:3.9](https://img.shields.io/badge/Python-3.9-yellow) 
 Program for monitor <b>your own</b> online activity on [vk.com]
 
 </div><br>
@@ -21,7 +21,7 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 > - [ ] 📑 Scrapping profile info
 > - [ ] 👪 Multiple tokens support
 > - [ ] 🎱 Predicting activity
-> - [x] ~~🔀 Random proxy (sslproxies.org)~~ (403 Forbidden)
+> - [x] ~~🔀 Random proxy (sslproxies.org)~~ (Banhammered)
 
 
 
@@ -37,7 +37,7 @@ Optional
 <details><summary>Example sets</summary>
 
 ```pythons
-API_TOKEN = '000fuck0vk000i8oppkq22so2c7binpyysm5lpwxl3uliibir7kcr2ir8g0rgbu7lv4mo0000use0tlgrm000'
+API_TOKEN = '000fuck0fvk000i8oppkq22so2c7binpysm5lpwxl3uliibir7kcr2ir8g0rgbu7lv4mo0000use0tlgrm000'
 
 TARGETS = [
     '123456789', '987654321', '121201'

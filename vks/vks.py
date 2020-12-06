@@ -47,7 +47,7 @@ def user_data_parser(user_data, data_time):
     )
 
     msg = f"[{user_data.get('id')}] {user_data.get('first_name')} {user_data.get('last_name')} " \
-          f"{'Online' if user_data.get('online') is 1 else 'Offline'}"
+          f"{'Online' if user_data.get('online') == 1 else 'Offline'}"
 
     logger.info(msg)
 

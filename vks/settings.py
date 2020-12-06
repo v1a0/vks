@@ -1,15 +1,20 @@
+from loguru import logger
+from os import environ as env
+
 """
         THIS IS MAIN SETTINGS FILE
 Enter here your API token and targets ids
 """
 
 API_TOKEN = '__ENTER_YOUR_VK_API_TOKEN_HERE__'
+# API_TOKEN = env['VKS_API_TOKEN']
 
 TARGETS = [
-    '123', '23456'
+    '12345678', '87654321'
 ]
-
-
+# TARGETS = [
+#     env['VKS_TARGET_1'], env['VKS_TARGET_2']
+# ]
 
 """
                       ADVANCED SETTINGS
@@ -39,7 +44,7 @@ GREETING_ART = """
      %%%%%%%%%       %%%  %%%   %%%%%%%%%          %%%  %%%   %%%%%       %%%%%
      %%%%%%%%%%       %%% %%% %%%%%%%%%%%           %%%%%%    %%%%%%          %%%
      %%%%%%%%%%%       %%%%% %%%(%%%%%%%%            %%%%%    %%%  %%%  %    %%%%
-      %%%%%%%%% %              %%%%%%%%%             %%%%     %%%   %%% %%%%%%%/  v0.2
+      %%%%%%%%% %              %%%%%%%%%             %%%%     %%%   %%% %%%%%%%/  v0.2.2
        %%%%%%    %%*         ,%%%%%%%%%
         %%%%%        %%%%*  %%%%%%%%%%
           /%%%%             %%%%%%%%
