@@ -4,7 +4,7 @@
 	</div>
 <br>
 
-# VKS v 0.2.2 ![Python:3.9](https://img.shields.io/badge/Python-3.9-yellow) 
+# VKS v 0.2.3 ![Python:3.9](https://img.shields.io/badge/Python-3.9-green)  
 Program for monitor <b>your own</b> online activity on [vk.com]
 
 </div><br>
@@ -12,47 +12,84 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 # About
 
 ### Features:
-- [x] 📈 Recording online activity
+- [x] 📈 Recording online activity (module.onliner)
+- [x] 📑 Particularly profile data scrapping (module.onliner)
 - [x] 🎯 Multiple targets support
+- [x] 👪 Multiple API tokens support
 - [x] 🌐 Proxy support
+    - [x] Common proxy settings
+    - [x] Personal proxy settings (for different API tokens)
+- [x] ⚙️ Custom modules
+    - [x] Modules exceptions
+    - [x] On/Off modules
+- [x] ~~🔀 Random proxy (sslproxies.org)~~ (Banhammered)
 
 ### Coming soon
 > - [ ] 📊 Live time visualizing data
 > - [ ] 📑 Scrapping profile info
-> - [ ] 👪 Multiple tokens support
 > - [ ] 🎱 Predicting activity
-> - [x] ~~🔀 Random proxy (sslproxies.org)~~ (Banhammered)
 
 
 
 # How to run
 
 First of all, set your settings in file `settings.py`:
-1. API_TOKEN = Your VK API token
-2. TARGETS = list of targets ids
+1) API_TOKENS = list of your VK API tokens
+2) TARGETS_IDS = list of targets ids
 
 Optional
-1. PROXY = Custom proxy settings
+1) PROXY = Custom proxy settings
 
-<details><summary>Example sets</summary>
+<details><summary> < Example > </summary>
 
-```pythons
-API_TOKEN = '000fuck0fvk000i8oppkq22so2c7binpysm5lpwxl3uliibir7kcr2ir8g0rgbu7lv4mo0000use0tlgrm000'
+```python
+# Main settings
 
-TARGETS = [
-    '123456789', '987654321', '121201'
+API_TOKENS = [
+    '000fuck0fvk000i8oppkq22so2c7binpysm5lpwxlfoxcbbir7kcr2ir8g0rgbu7lv4mo0000use0tlgrm000',
 ]
 
-# Optional
+TARGETS_IDS = [
+   '123456789', '987654321', '121201',
+]
+
+
+
+# Optional settings
+
+MODULES = [
+    modules.onliner,
+    modules.my_module
+]
+
+MODULES_EXCEPTS = {
+    MODULES[1]: [
+        TARGETS_IDS[0], 
+        TARGETS_IDS[2]
+    ]
+}
+
 PROXY = {
     "http": "http://123.45.6.78:4321",
     "https": "https://123.45.6.78:4321",
     "ftp": ""
 }
+
+PROXY_FOR_BOT = {
+    API_TOKENS[0]: {
+        "http": "http://123.45.6.78:4321",
+        "https": "https://123.45.6.78:4321",
+        "ftp": ""
+    }
+}
+
+REQ_FREQUENCY = 60
 ```
+
+More details about new settings I'll add soon
 </details>
 
-And just run your main script `python3.8 main.py`.
+And just run your main script `python3.9 main.py`.
 
 
 # How to get API_TOKEN

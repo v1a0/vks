@@ -1,8 +1,12 @@
-from settings import *
+from flex_loger import logger
+from types import ModuleType
+from classes import APIBot
 import vk_api_lite as api
-import sqlite_requests as db
+from settings import *
 import time
-import datetime
+
+BOTS: [APIBot] = []
+TASKS: {ModuleType: [str]} = {}
 
 
 @logger.catch
@@ -11,7 +15,6 @@ def sleep(func):
     Decorator for requests delay
     Waiting (60-delta) seconds after function is done
     """
-
     def wrapper(*args, **kwargs):
         start_time = time.time()
         func(*args, **kwargs)
@@ -22,65 +25,114 @@ def sleep(func):
 
 
 @logger.catch
-def none2zero(any_val):
-    return any_val if any_val is not None else 0
+def init_bots(tokens_list, proxy, custom_proxy):
+    """
+    Initialize bots list
+
+    :param custom_proxy: Proxy settings for special bot(s)
+    :param tokens_list: List of tokens for bots
+    :param proxy: Common proxy settings
+    """
+    for token in tokens_list:
+        if api.verify_api_token(token):
+            if custom_proxy.get(token):
+                proxy = custom_proxy.get(token)
+
+            BOTS.append(APIBot(token=token, valid=True, proxy=proxy))
 
 
 @logger.catch
-def user_data_parser(user_data, data_time):
+def init_tasks(targets, all_loads, load_excepts):
     """
-        Parsing user's data and sending it into DB
-        logging results
+    Tasks initialization
+    TASKS: {
+        module1: [id1, id2, id3],
+        module2: [id1, id5]
+        ...
+    }
+    :param targets: targets ids (sorry)
+    :param all_loads: all modules - all possible load
+    :param load_excepts: dict of modules witch have excluded targets
     """
+    for load in all_loads:
+        except_targets = load_excepts.get(load)
 
-    db.insert_and_update_user_data(
-        uid=user_data.get('id'),
-        time=data_time,
-        first_name=user_data.get('first_name'),
-        last_name=user_data.get('last_name'),
-        is_closed=user_data.get('is_closed'),
-        online=none2zero(user_data.get('online')),
-        sex=user_data.get('sex'),
-        photo=user_data.get('photo_max_orig'),
-        mobile=none2zero(user_data.get('online_mobile')),
-        os=none2zero(user_data.get('online_app'))
-    )
+        if except_targets:
+            TASKS[load] = [target for target in targets if target not in except_targets]
+        else:
+            TASKS[load] = targets
 
-    msg = f"[{user_data.get('id')}] {user_data.get('first_name')} {user_data.get('last_name')} " \
-          f"{'Online' if user_data.get('online') == 1 else 'Offline'}"
 
+@logger.catch
+def status_printer(results: [{ModuleType: bool}]):
+    """
+    Just printing results of modules work
+    :param results: Results of modules work
+    """
+    msg = f"\n{'='*10} RESULTS {'='*10}\n"
+    for result in results:
+        for (module, complete) in result.items():
+            msg += f"{module.__name__}: {'Completed' if complete else 'Failed'}\n"
     logger.info(msg)
-
-
-@logger.catch
-@api.verify_api_token
-def loop():
-    """
-    If API_TOKEN valid starts logging
-    """
-    while True:
-        main()
 
 
 @logger.catch
 @sleep
 def main():
     """
-    Getting, parsing and saving targets data
+    This module do:
+        - Sets modules settings :     module.settings(ids, bot)
+        - Running modules :           module.run()
+        - Checking results :          module.is_done()
+        - Final result contains in 'results' var as [ {module1: Bool}, {module2: Bool} ]
     """
-    targets_data_json_list = api.get_alldata_json(ids=TARGETS, token=API_TOKEN)
-    data_time = datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
-    users = targets_data_json_list.get('response')
-    for user_data in users:
-        user_data_parser(user_data, data_time)
+    results: [{ModuleType: bool}] = []
 
-    logger.info(f'Scrapping loop finished, waiting (around) {REQ_FREQUENCY} sec for next...')
+    for (module, ids) in TASKS.items():
+        if not ids:
+            continue    # skips
+
+        bots_for_task = [bot for bot in BOTS if bot.valid]
+        is_complete = False
+
+        while bots_for_task:                        # while (bots_for_task not empty)
+            bot = bots_for_task[0]                  # sets new bot for a task
+
+            try:                                    # try to use module
+                module.settings(ids, bot)           # sending ids ans bot to module
+                module.run()                        # running module
+                is_complete = module.is_complete()  # result of module's work
+
+            except AttributeError as error:         # if module has no one of necessary attributes
+                logger.error(error)
+                break                               # break the loop
+
+            if is_complete:                         # if task is complete
+                break                               # breaking loop
+            else:                                   # if task is complete
+                bots_for_task.pop(0)                # removing element
+
+        results.append({module: is_complete})
+
+    status_printer(results)
+
+
+@logger.catch
+def loop():
+    while True:
+        main()
 
 
 if __name__ == '__main__':
+    logger.info(f"""
+    Logging starting...
+    Settings of new monitoring session
+    | Targets: {TARGETS_IDS}
+    | API token: { f'<SET {len(API_TOKENS)}>' if API_TOKENS != ['__ENTER_YOUR_VK_API_TOKEN_HERE__'] else '<UNSET>'}
+    | Proxy settings: {PROXY}
+    +{'-' * 60}
+    """)
 
-    logger.info(f"""Logging starting...
-                TARGETS: {TARGETS}""")
-
+    init_bots(API_TOKENS, PROXY, PROXY_FOR_BOT)
+    init_tasks(TARGETS_IDS, MODULES, MODULES_EXCEPTS)
     loop()
-
