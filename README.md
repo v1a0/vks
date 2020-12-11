@@ -4,7 +4,7 @@
 	</div>
 <br>
 
-# VKS v 0.2.3 ![Python:3.9](https://img.shields.io/badge/Python-3.9-green)  
+# VKS v 0.2.4 ![Python:3.9](https://img.shields.io/badge/Python-3.9-green)  
 Program for monitor <b>your own</b> online activity on [vk.com]
 
 </div><br>
@@ -22,6 +22,7 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 - [x] ⚙️ Custom modules
     - [x] Modules exceptions
     - [x] On/Off modules
+    - [x] Any delay for any module
 - [x] ~~🔀 Random proxy (sslproxies.org)~~ (Banhammered)
 
 ### Coming soon
@@ -83,7 +84,7 @@ PROXY_FOR_BOT = {
     }
 }
 
-REQ_FREQUENCY = 60
+REQ_FREQUENCY = 0.1
 ```
 
 More details about new settings I'll add soon

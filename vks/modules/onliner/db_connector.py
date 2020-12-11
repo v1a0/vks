@@ -76,3 +76,6 @@ def save_user_data(user_data):
 
     logger.info(f"[{user_data.get('id')}] {user_data.get('first_name')} {user_data.get('last_name')} "
                 f"{'Online' if user_data.get('online') == 1 else 'Offline'}")
+
+
+tables_init()

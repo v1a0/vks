@@ -12,19 +12,18 @@ TASKS: {ModuleType: [str]} = {}
 @logger.catch
 def sleep(func):
     """
-    Decorator for requests delay
-    Waiting (60-delta) seconds after function is done
+    Decorator for loop's delay
+    Waiting for a few seconds after run function again
     """
     def wrapper(*args, **kwargs):
-        start_time = time.time()
         func(*args, **kwargs)
-        delay_time = start_time - time.time()
-        time.sleep(delay_time if delay_time > 0 else REQ_FREQUENCY)
+        time.sleep(REQ_FREQUENCY)
 
     return wrapper
 
 
 @logger.catch
+@sleep
 def init_bots(tokens_list, proxy, custom_proxy):
     """
     Initialize bots list
@@ -69,6 +68,9 @@ def status_printer(results: [{ModuleType: bool}]):
     Just printing results of modules work
     :param results: Results of modules work
     """
+    if not results:
+        return
+
     msg = f"\n{'='*10} RESULTS {'='*10}\n"
     for result in results:
         for (module, complete) in result.items():
@@ -90,7 +92,15 @@ def main():
 
     for (module, ids) in TASKS.items():
         if not ids:
-            continue    # skips
+            continue        # skips module if it have no attached ids
+
+        try:
+            if not module.ready():
+                continue    # skips module if it is not ready
+
+        except AttributeError as error:
+            logger.error(error)
+            continue        # skips module if it have no necessary attributes
 
         bots_for_task = [bot for bot in BOTS if bot.valid]
         is_complete = False

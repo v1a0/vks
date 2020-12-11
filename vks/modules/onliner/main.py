@@ -3,6 +3,20 @@ import modules.onliner.local_vars as local
 import datetime
 import modules.onliner.db_connector as dbc
 from flex_loger import logger
+import time
+
+
+@logger.catch
+def sleep(func):
+    """
+    Decorator for requests delay
+    Waiting (local.timeout) seconds after function has been run
+    """
+    def wrapper(*args, **kwargs):
+        local.ready_after = time.time() + local.timeout
+        func(*args, **kwargs)
+
+    return wrapper
 
 
 @logger.catch
@@ -14,7 +28,11 @@ def settings(users_ids: [str], bot: APIBot):
     """
     local.users_ids = users_ids
     local.bot = bot
-    dbc.tables_init()
+
+
+@logger.catch
+def ready() -> bool:
+    return time.time() >= local.ready_after
 
 
 @logger.catch
@@ -27,10 +45,12 @@ def is_complete() -> bool:
 
 
 @logger.catch
+@sleep
 def run():
     """
     Running main module process
     """
+    local.is_complete = False
     data = local.bot.request(method='users.get', params={
         'user_ids': local.users_ids,
         'fields': ['sex', 'online', 'photo_max_orig', 'online_mobile']
