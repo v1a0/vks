@@ -32,14 +32,42 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 
 
 
+# Installation
+
+1) Clone the latest stable release 
+    ```shell script
+    git clone https://github.com/v1a0/vks.git
+    ```
+
+2) Install development dependencies:
+    ```shell script
+    cd vks
+    pip3 install -r test-requirements.txt
+    ```
+
 # How to run
 
-First of all, set your settings in file `settings.py`:
-1) API_TOKENS = list of your VK API tokens
-2) TARGETS_IDS = list of targets ids
+Before running, configure necessary settings in file `settings.py`:
 
-Optional
-1) PROXY = Custom proxy settings
+| Setting | Description | Example |
+| :--- | :--- | :---: |
+| **API_TOKENS** | list of your VK API tokens (might contain only one) | `['000fuck...rm0a1']` |
+| **TARGETS_IDS** | list of targets ids (also might contain one) | `['123', '345']` |
+
+<small>[* How to get API token read here](#How-to-get-API_TOKEN)</small>
+
+
+Optional settings:
+
+| Setting | Description |
+| :--- | :--- |
+| **MODULES** | List of using modules |
+| **MODULES_EXCEPTS** | Sets which targets (ids), modules will skip |
+| **PROXY** | Custom proxy settings for all requests to API |
+| **PROXY_FOR_BOT** | Custom proxy settings for some bot |
+| **REQ_FREQUENCY** | How long time script will be sleep after all modules called |
+
+
 
 <details><summary> < Example > </summary>
 
@@ -129,5 +157,11 @@ Official instruction:
 https://vk.com/dev/access_token
 
 
+# Modules
+
+| Setting | Description | Database | Requests |
+| :--- | :--- | :---: | :---: |
+| Onliner | Collecting online status of users <br>Checking and updating public users data | vks.db | users.get?sex,online,photo_max_orig,online_mobile | 
+| Template | Template for future modules | No | No |
 
 [vk.com]: (https://vk.com/)
