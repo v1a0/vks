@@ -42,7 +42,7 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 2) Install development dependencies:
     ```shell script
     cd vks
-    pip3 install -r test-requirements.txt
+    pip3 install -r requirements.txt
     ```
 
 # How to run
