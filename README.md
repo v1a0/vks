@@ -10,18 +10,18 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 </div><br>
 
 # Summery
-- [Features](#Features:)
-- [Installation](#Installation)
-- [How to run](#How-to-run)
-- [How to get API_TOKEN](#How-to-get-API_TOKEN)
-- [Modules](#Modules)
-    - [Modules settings](#Modules-settings)
-        - [Onliner](#Onliner)
-        - [Hidden friends](#Hidden-friends)
+> - [Features](#Features)
+> - [Installation](#Installation)
+> - [How to run](#How-to-run)
+> - [How to get API_TOKEN](#How-to-get-API_TOKEN)
+> - [Modules](#Modules)
+>     - [Modules settings](#Modules-settings)
+>         - [Onliner](#Onliner)
+>         - [Hidden friends](#Hidden-friends)
 
-## About
+# About
 
-### Features:
+### Features
 - [x] 📈 Recording online activity (module.onliner)
 - [x] 🙊 Hidden friends searching (module.hidden_friends)
 - [x] 📑 Particularly profile data scrapping (module.onliner)
