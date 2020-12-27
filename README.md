@@ -155,9 +155,26 @@ https://vk.com/dev/access_token
 
 # Modules
 
-| Setting | Description | Database | Requests |
+| Module | Description | Database | Requests |
 | :--- | :--- | :---: | :---: |
-| Onliner | Collecting online status of users <br>Checking and updating public users data | vks.db | users.get?sex,online,photo_max_orig,online_mobile | 
-| Template | Template for future modules | No | No |
+| Onliner | Collecting online status of users <br>Checking and updating public users data | onliner.db<br>modules_stat.db | users.get?sex,online,photo_max_orig,online_mobile | 
+| Hidden friends | Searching hidden friends<br>Analysing friends of friends | hidden_friends.db<br>modules_stat.db | friends.get?user_id=id,count=val | 
+| Template | Template for future modules | None | None |
+
+
+## Modules settings
+
+### Onliner
+| Setting | Description | Located | Value |
+| :--- | :--- | :---: | :---: |
+| MODULES_TIMEOUTS | How often run module | settings.py | 0 - 9999999<br>60 by default |
+
+### Hidden friends
+| Setting | Description | Located | Value |
+| :--- | :--- | :---: | :---: |
+| MODULES_TIMEOUTS | How often run module | settings.py | 13E7<br>it's mean "run only once" |
+| deepness | 1 - means you searching among friends of friends<br>2 - among friends of friends and friends of friends of friends<br>And so on | modules.hidden_friends.module_settings | 0 - 4<br>2 by default|
+| max_friends | Slice of friends list. How many friends API can send back | modules.hidden_friends.module_settings | 0 - 9999999<br>1000 by default  |
+
 
 [vk.com]: (https://vk.com/)
