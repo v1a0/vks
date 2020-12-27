@@ -68,7 +68,9 @@ Before running, configure necessary settings in file `settings.py`:
 <small>[* How to get API token read here](#How-to-get-API_TOKEN)</small>
 
 
-Optional settings:
+### Optional settings:
+
+<details><summary>[Show / Hide]</summary>
 
 | Setting | Description |
 | :--- | :--- |
@@ -78,9 +80,11 @@ Optional settings:
 | **MODULES_TIMEOUTS** | How often to call (some) module |
 | **REQ_FREQUENCY** | How long time script will be sleep after all modules called |
 
+</details>
 
+### Example 
 
-<details><summary> < Example > </summary>
+<details><summary>[Show / Hide]</summary>
 
 ```python
 # Main settings
@@ -125,7 +129,7 @@ REQ_FREQUENCY = 0.01
 ```
 </details>
 
-And just run your main script `python3.9 main.py`.
+<b>And finally just run it by python3+, like this: `python3.9 main.py`.
 
 
 # How to get API_TOKEN
@@ -175,6 +179,8 @@ https://vk.com/dev/access_token
 
 ## Modules settings
 
+<details><summary>[Show / Hide]</summary>
+
 ### Onliner
 | Setting | Description | Located | Value |
 | :--- | :--- | :---: | :---: |
@@ -187,5 +193,6 @@ https://vk.com/dev/access_token
 | deepness | 1 - means you searching among friends of friends<br>2 - among friends of friends and friends of friends of friends<br>And so on | modules.hidden_friends.module_settings | 0 - 4<br>2 by default|
 | max_friends | Slice of friends list. How many friends API can send back | modules.hidden_friends.module_settings | 0 - 9999999<br>1000 by default  |
 
+</details>
 
 [vk.com]: (https://vk.com/)
