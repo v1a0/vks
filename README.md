@@ -5,11 +5,12 @@
 <br>
 
 # VKS v 0.2.5 ![Python:3.9](https://img.shields.io/badge/Python-3.9-green)  
-Program for monitor <b>your own</b> online activity on [vk.com]
+Program for analysing <b>your own</b> [vk.com] data. 
+<br><b>Do not track other people without their acceptation!</b>
 
 </div><br>
 
-# Summery
+# Summary
 > - [Features](#Features)
 > - [Installation](#Installation)
 > - [How to run](#How-to-run)
