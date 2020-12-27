@@ -20,6 +20,8 @@ Program for analysing <b>your own</b> [vk.com] data.
 >         - [Onliner](#Onliner)
 >         - [Hidden friends](#Hidden-friends)
 
+---
+
 # About
 
 ### Features
@@ -165,7 +167,6 @@ __YOUR_API_TOKEN__ it is you API_TOKEN
 
 </details>
 
----
 Official instruction:
 https://vk.com/dev/access_token
 
@@ -179,7 +180,6 @@ https://vk.com/dev/access_token
 | Hidden friends | Searching hidden friends<br>Analysing friends of friends | hidden_friends.db<br>modules_stat.db | friends.get?user_id=id,count=val | 
 | Template | Template for future modules | None | None |
 
----
 
 ## Modules settings
 
