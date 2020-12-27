@@ -11,14 +11,14 @@ Program for analysing <b>your own</b> [vk.com] data.
 </div><br>
 
 # Summary
-> - [Features](#Features)
-> - [Installation](#Installation)
-> - [How to run](#How-to-run)
-> - [How to get API_TOKEN](#How-to-get-API_TOKEN)
-> - [Modules](#Modules)
->     - [Modules settings](#Modules-settings)
->         - [Onliner](#Onliner)
->         - [Hidden friends](#Hidden-friends)
+- [Features](#Features)
+- [Installation](#Installation)
+- [How to run](#How-to-run)
+- [How to get API_TOKEN](#How-to-get-API_TOKEN)
+- [Modules](#Modules)
+    - [Modules settings](#Modules-settings)
+        - [Onliner](#Onliner)
+        - [Hidden friends](#Hidden-friends)
 
 ---
 
