@@ -73,7 +73,7 @@ Before running, configure necessary settings in file `settings.py`:
 
 ### Optional settings:
 
-<details><summary>[Show / Hide]</summary>
+<details><summary><h4><code>[Show / Hide]</code></h4></summary>
 
 | Setting | Description |
 | :--- | :--- |
@@ -87,7 +87,7 @@ Before running, configure necessary settings in file `settings.py`:
 
 ### Example 
 
-<details><summary>[Show / Hide]</summary>
+<details><summary><h4><code>[Show / Hide]</code></h4></summary>
 
 ```python
 # Main settings
@@ -146,7 +146,7 @@ Replace "__APPs_ID__" in the link below to your app IP
 `https://oauth.vk.com/authorize?client_id=___APPs_ID___&scope=photos,audio,video,docs,notes,pages,status,offers,questions,wall,groups,email,notifications,stats,ads,offline,docs,pages,stats,notifications&response_type=token`
 
 
-<details><summary>[Example]</summary>
+<details><summary><code>[ Example ]</code></summary>
 
 `https://oauth.vk.com/authorize?client_id=1234567&scope=photos,audio,video,docs,notes,pages,status,offers,questions,wall,groups,email,notifications,stats,ads,offline,docs,pages,stats,notifications&response_type=token`
 
@@ -161,7 +161,7 @@ it will be looks like:
 __YOUR_API_TOKEN__ it is you API_TOKEN
 
 
-<details><summary>[Example]</summary>
+<details><summary><code>[ Example ]</code></summary>
 
 `https://oauth.vk.com/authorize?client_id=000fuck0vk000i8oppkq22so2c7binpyysm5lpwxl3uliibir7kcr2ir8g0rgbu7lv4mo0000use0tlgrm000&scope=photos,audio,video,docs,notes,pages,status,offers,questions,wall,groups,email,notifications,stats,ads,offline,docs,pages,stats,notifications&response_type=token`
 
@@ -183,7 +183,7 @@ https://vk.com/dev/access_token
 
 ## Modules settings
 
-<details><summary>[Show / Hide]</summary>
+<details><summary><h4><code>[Show / Hide]</code></h4></summary>
 
 ### Onliner
 | Setting | Description | Located | Value |
