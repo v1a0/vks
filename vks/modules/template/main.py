@@ -1,54 +1,18 @@
-import modules.template.local_vars as local
 from flex_loger import logger
-from classes import APIBot
-import time
+from classes import APIBot, Status
 
 
 @logger.catch
-def sleep(func):
-    """
-    Decorator for requests delay
-    Waiting (local.timeout) seconds after function has been run
-    """
-    def wrapper(*args, **kwargs):
-        local.ready_after = time.time() + local.timeout
-        func(*args, **kwargs)
-
-    return wrapper
-
-
-@logger.catch
-def ready() -> bool:
-    return time.time() >= local.ready_after
-
-
-@logger.catch
-def settings(users_ids: [str], bot: APIBot):
-    """
-    Settings for module
-    :param users_ids: users ids
-    :param bot:
-    """
-    local.users_ids = users_ids
-    local.bot = bot
-
-
-@logger.catch
-def is_complete() -> bool:
-    """
-    Is module complete successfully
-    :return:
-    """
-    return local.is_complete
-
-
-@logger.catch
-@sleep
-def run():
+def main(users_ids: [str], bot: APIBot):
     """
     Running main module process
     """
+    status = Status
+    status.processing()
+
     '<-- HERE WILL BE MAIN LOGIC OF YOUR MODULE -->'
+
+    status.success()
+    # status.failed()   # if it's failed
+
     pass
-
-

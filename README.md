@@ -4,7 +4,7 @@
 	</div>
 <br>
 
-# VKS v 0.2.4 ![Python:3.9](https://img.shields.io/badge/Python-3.9-green)  
+# VKS v 0.2.5 ![Python:3.9](https://img.shields.io/badge/Python-3.9-green)  
 Program for monitor <b>your own</b> online activity on [vk.com]
 
 </div><br>
@@ -13,17 +13,17 @@ Program for monitor <b>your own</b> online activity on [vk.com]
 
 ### Features:
 - [x] 📈 Recording online activity (module.onliner)
+- [x] 🙊 Hidden friends searching (module.hidden_friends)
 - [x] 📑 Particularly profile data scrapping (module.onliner)
 - [x] 🎯 Multiple targets support
 - [x] 👪 Multiple API tokens support
 - [x] 🌐 Proxy support
-    - [x] Common proxy settings
-    - [x] Personal proxy settings (for different API tokens)
 - [x] ⚙️ Custom modules
     - [x] Modules exceptions
     - [x] On/Off modules
     - [x] Any delay for any module
-- [x] ~~🔀 Random proxy (sslproxies.org)~~ (Banhammered)
+    - [x] Easy to create your own by template!
+- [x] ~~🔀 Random proxy (sslproxies.org)~~ (Banhammered by VkApi)
 
 ### Coming soon
 > - [ ] 📊 Live time visualizing data
@@ -64,7 +64,7 @@ Optional settings:
 | **MODULES** | List of using modules |
 | **MODULES_EXCEPTS** | Sets which targets (ids), modules will skip |
 | **PROXY** | Custom proxy settings for all requests to API |
-| **PROXY_FOR_BOT** | Custom proxy settings for some bot |
+| **MODULES_TIMEOUTS** | How often to call (some) module |
 | **REQ_FREQUENCY** | How long time script will be sleep after all modules called |
 
 
@@ -91,6 +91,12 @@ MODULES = [
     modules.my_module
 ]
 
+MODULES_TIMEOUTS = {
+    modules.onliner: 60,            # 60 seconds
+    modules.hidden_friends: 13E7,   # only once after run
+    # modules.template: 0,
+}
+
 MODULES_EXCEPTS = {
     MODULES[1]: [
         TARGETS_IDS[0], 
@@ -104,18 +110,8 @@ PROXY = {
     "ftp": ""
 }
 
-PROXY_FOR_BOT = {
-    API_TOKENS[0]: {
-        "http": "http://123.45.6.78:4321",
-        "https": "https://123.45.6.78:4321",
-        "ftp": ""
-    }
-}
-
-REQ_FREQUENCY = 0.1
+REQ_FREQUENCY = 0.01
 ```
-
-More details about new settings I'll add soon
 </details>
 
 And just run your main script `python3.9 main.py`.

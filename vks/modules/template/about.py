@@ -1,3 +1,8 @@
-text = """
-Coming soon
+version = "0.0.1"
+name = "template"
+about = """
+This module scrapping targets ...
+
+DB: Saving it's all into ...
+    table '...': is for ...
 """

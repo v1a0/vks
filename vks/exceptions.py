@@ -1,4 +1,4 @@
-class InvalidAPIToken(Exception):
+class NoValidTokens(Exception):
     """Invalid API Token
     Currently API Token has not accept by vk api
     """

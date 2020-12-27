@@ -25,11 +25,18 @@ TARGETS_IDS = [
 
 MODULES = [
     modules.onliner,
-    # modules.template
+    modules.hidden_friends,
+    # modules.template,
 ]
 
-MODULES_EXCEPTS = {
+MODULES_TIMEOUTS = {
+    modules.onliner: 60,            # 60 seconds
+    modules.hidden_friends: 13E7,   # only once after run
+    # modules.template: 0,
+}
 
+MODULES_EXCEPTS = {
+    MODULES[1]: [TARGETS_IDS[1], TARGETS_IDS[2], TARGETS_IDS[3]]
 }
 
 PROXY = {
@@ -38,11 +45,8 @@ PROXY = {
     "ftp": ""
 }
 
-PROXY_FOR_BOT = {
-    
-}
 
-REQ_FREQUENCY = 0.1
+REQ_FREQUENCY = 0.01
 
 GREETING_ART = """
                  #%%%%%%%%%%%
