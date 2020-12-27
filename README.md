@@ -41,7 +41,7 @@ Program for analysing <b>your own</b> [vk.com] data.
 > - [ ] 📑 Scrapping profile info
 > - [ ] 🎱 Predicting activity
 
-
+---
 
 # Installation
 
@@ -56,6 +56,8 @@ Program for analysing <b>your own</b> [vk.com] data.
     pip3 install -r requirements.txt
     ```
 
+---
+
 # How to run
 
 Before running, configure necessary settings in file `settings.py`:
@@ -66,7 +68,6 @@ Before running, configure necessary settings in file `settings.py`:
 | **TARGETS_IDS** | list of targets ids (also might contain one) | `['123', '345']` |
 
 <small>[* How to get API token read here](#How-to-get-API_TOKEN)</small>
-
 
 ### Optional settings:
 
@@ -131,6 +132,7 @@ REQ_FREQUENCY = 0.01
 
 <b>And finally just run it by python3+, like this: `python3.9 main.py`.
 
+---
 
 # How to get API_TOKEN
 
@@ -167,6 +169,7 @@ __YOUR_API_TOKEN__ it is you API_TOKEN
 Official instruction:
 https://vk.com/dev/access_token
 
+---
 
 # Modules
 
@@ -176,6 +179,7 @@ https://vk.com/dev/access_token
 | Hidden friends | Searching hidden friends<br>Analysing friends of friends | hidden_friends.db<br>modules_stat.db | friends.get?user_id=id,count=val | 
 | Template | Template for future modules | None | None |
 
+---
 
 ## Modules settings
 
