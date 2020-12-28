@@ -174,6 +174,7 @@ https://vk.com/dev/access_token
 
 # Modules
 
+
 | Module | Description | Database | Requests |
 | :--- | :--- | :---: | :---: |
 | Onliner | Collecting online status of users <br>Checking and updating public users data | onliner.db<br>modules_stat.db | users.get?sex,online,photo_max_orig,online_mobile | 
@@ -185,12 +186,17 @@ https://vk.com/dev/access_token
 
 <details><summary><h4><code>[Show / Hide]</code></h4></summary>
 
+
 ### Onliner
+
+
 | Setting | Description | Located | Value |
 | :--- | :--- | :---: | :---: |
 | MODULES_TIMEOUTS | How often run module | settings.py | 0 - 9999999<br>60 by default |
 
 ### Hidden friends
+
+
 | Setting | Description | Located | Value |
 | :--- | :--- | :---: | :---: |
 | MODULES_TIMEOUTS | How often run module | settings.py | 13E7<br>it's mean "run only once" |
