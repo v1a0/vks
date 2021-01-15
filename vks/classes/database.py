@@ -1,6 +1,6 @@
 import sqlite3
 from flex_loger import logger
-from typing import Dict, List, Iterable, Union
+from typing import Dict, List, Iterable, Union, Any
 
 
 class Database:
@@ -56,7 +56,7 @@ class Database:
                 logger.error(error)
 
     @logger.catch
-    def insert(self, table_name: str, rows: Dict[str, str]):
+    def insert(self, table_name: str, rows: Dict[Any, Any]):
         """
         Insert data into db
         :param table_name = 'Table1'
@@ -66,9 +66,14 @@ class Database:
                 }
         """
 
+        for (row, value) in rows.items():
+            if type(value) == list:
+                rows[row] = ','.join(map(str, value))  # map(str, value) stringifies list items
+
         columns = ', '.join(rows.keys())
         values = [tuple(rows.values())]
         placeholders = ", ".join("?" * len(rows.keys()))
+
         script = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
         self.executemany(script, values)
 

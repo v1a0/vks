@@ -70,7 +70,7 @@ def main():
             continue
 
         logger.info(f"Running {module.__name__}...")
-        process = Process(target=module.main, args=[ids, BOT])  # running module
+        process = Process(target=module.main, args=(ids, BOT))  # running module
         process.start()
         TIMEOUTS[module] = time.time() + MODULES_TIMEOUTS.get(module)
 

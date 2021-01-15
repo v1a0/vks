@@ -4,7 +4,7 @@
 	</div>
 <br>
 
-# VKS v0.2.5 ![Python:3.9](https://img.shields.io/badge/Python-3.9-green)  
+# VKS v0.2.6 ![Python:3.9](https://img.shields.io/badge/Python-3.9-green)  
 Program for analysing <b>your own</b> [vk.com] data. 
 <br><b>Do not track other people without their acceptation!</b>
 
@@ -177,7 +177,7 @@ https://vk.com/dev/access_token
 
 | Module | Description | Database | Requests |
 | :--- | :--- | :---: | :---: |
-| Onliner | Collecting online status of users <br>Checking and updating public users data | onliner.db<br>modules_stat.db | users.get?sex,online,photo_max_orig,online_mobile | 
+| Onliner | Collecting online status of users and friends online<br>Checking and updating public users data | onliner.db<br>modules_stat.db | users.get?sex,online,photo_max_orig,online_mobile | 
 | Hidden friends | Searching hidden friends<br>Analysing friends of friends | hidden_friends.db<br>modules_stat.db | friends.get?user_id=id,count=val | 
 | Template | Template for future modules | None | None |
 

@@ -1,5 +1,7 @@
 from flex_loger import logger
 from classes import Database
+from typing import Dict, Any
+
 db: Database = Database(path='db/onliner.db')
 
 
@@ -9,7 +11,7 @@ def tables_init():
     Initialization of necessary tables for module
     """
     db.create_table(
-        table_name='logging',
+        table_name='online_log',
         rows={
             'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
             'time': 'TEXT',
@@ -17,8 +19,9 @@ def tables_init():
             'online': 'INTEGER',
             'mobile': 'INTEGER',
             'os': 'TEXT',
+            'friends_online': 'TEXT',
         },
-        foreign_keys={'user_id': 'users("user_id")'}
+        foreign_keys={'user_id': 'users("user_id")',}
     )
 
     db.create_table(
@@ -35,7 +38,7 @@ def tables_init():
 
 
 @logger.catch
-def save_user_data(user_data):
+def save_user_data(user_data: Dict[str, Any]):
     """
     Inserting users data into db (if user does not exist) or updating (if user already exist)
     Saving online status
@@ -68,17 +71,18 @@ def save_user_data(user_data):
                 'photo': user_data.get('photo_max_orig'),
             })
 
-    db.insert_or_replace(
-        table_name='logging', rows={
+
+def save_user_online(user_data: Dict[str, Any]):
+
+    db.insert(  # or_rep?
+        table_name='online_log', rows={
             'time': user_data.get('time'),
             'user_id': user_data.get('id'),
             'online': user_data.get('online'),
             'mobile': user_data.get('mobile'),
             'os': user_data.get('os'),
+            'friends_online': user_data.get('friends_online'),
         })
-
-    logger.info(f"[{user_data.get('id')}] {user_data.get('first_name')} {user_data.get('last_name')} - "
-                f"{'Online' if user_data.get('online') == 1 else 'Offline'}")
 
 
 tables_init()

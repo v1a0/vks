@@ -69,7 +69,7 @@ class APIBot:
         parameters = ''
         for (parameter, values) in params.items():
             if type(values) == list:
-                parameters += f"{parameter}={','.join(values)}&"
+                parameters += f"{parameter}={','.join(map(str, values))}&"  # map(str, value) stringifies list items
             else:
                 parameters += f"{parameter}={values}&"
 
